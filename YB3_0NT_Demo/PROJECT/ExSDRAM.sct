@@ -1,0 +1,57 @@
+;/****************************************Copyright (c) **************************************************
+;**                         Guangzhou ZHIYUAN electronics Co.,LTD.                               
+;**                                     
+;**                               http://www.embedtools.com
+;**
+;**--------------File Info-------------------------------------------------------------------------------
+;** File Name:           ExSDRAM.scf
+;** Last modified Date:  2008-01-15
+;** Last Version:        1.1
+;** Descriptions:        Scatter File
+;**
+;**------------------------------------------------------------------------------------------------------
+;** Created By:          Chenmingji
+;** Created date:        2004-09-17
+;** Version:             1.0
+;** Descriptions:        First version
+;**
+;**------------------------------------------------------------------------------------------------------
+;** Modified by:         LinEnqiang
+;** Modified date:       2008-12-16
+;** Version:             V1.1
+;** Descriptions:
+;**
+;********************************************************************************************************/
+
+ROM_LOAD 0x80000000                                                     ;/*   外扩SDRAM默认在BANKA      */
+{
+    ROM_EXEC 0x80000000
+    {
+        Startup.o (vectors, +First)
+        * (+RO)
+    }
+    
+    ERAM +0                                                             
+    {
+        Startup.o (MyStacks)
+        * (+RW,+ZI)
+    }
+
+    HEAP_BOTTOM +0 UNINIT
+    {
+        Startup.o (HeapBottom)
+    }
+    
+    STACKS_BOTTOM +0 UNINIT
+    {
+        Startup.o (StackBottom)
+    }
+    HEAPS 0x84000000 UNINIT                                             ;/*  根据外扩SDRAM实际大小更改  */
+    {
+        Startup.o (HeapTop)
+        Startup.o (StacksTop)
+    }
+}
+;/*********************************************************************************************************
+;  END FILE
+;*********************************************************************************************************/
