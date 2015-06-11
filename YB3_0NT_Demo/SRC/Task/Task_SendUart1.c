@@ -96,134 +96,134 @@ uint8 Send1Data(uint8 *p,uint16 len)
 
 void SD_DataAdd_Save(uint8 *data)	   //存储数据地址
 {
-	uint8 i;
-	uint8 ReadFWtemp[8];
-	uint8 WriteFWtemp[8];
-	uint32 head,tail;		  //队列头：出队，队列尾：入队。
-	uint16 year_temp;
-	V_TIME 	time_temp;
-	uint16 time_num;
-	uint32 save_add;
-
-	//20140217 增加对参数的判断
-	if (data == NULL)
-	{
-		return;
-	}
-
-	Read256_full(BUF1ADDR,ReadFWtemp,8);	  //读取控制寄存器中的内容
-	head=ReadFWtemp[0]+(ReadFWtemp[1]<<8)+(ReadFWtemp[2]<<16)+(ReadFWtemp[3]<<24);
-	tail=ReadFWtemp[4]+(ReadFWtemp[5]<<8) + (ReadFWtemp[6]<<16) + (ReadFWtemp[7]<<24);
-
-	year_temp= data[34] + (data[35]<<8) - 2013 ;
-
-	time_temp.year = year_temp;	  //一年按照372天计算
-	time_temp.month = data[36];			  //一个月按照31天计算
-	time_temp.day = data[37];
-	time_num = data[39] + (data[40]<<8);    //时间序号，一天按照时间序号1-1440计算
-
-	//取得写入的地址
-	save_add = SD_STAT_START + ((time_temp.year * 372 * 288) + ((time_temp.month-1) * 31 * 288) + 
-				((time_temp.day-1) * 288) + time_num -1 )%	SD_STAT_BLOCK_NUM;
-
-	for (i = 0; i < 4; i++)
-	{
-		WriteFWtemp[i] = SD_BLOCK_HEAD[i];
-	} 
-	WriteFWtemp[4] = save_add&0xFF;
-	WriteFWtemp[5] = (save_add>>8)&0xFF;
-	WriteFWtemp[6] = (save_add>>16)&0xFF;
-	WriteFWtemp[7] = (save_add>>24)&0xFF;
-
-	if((tail+1)%SD_STAT_ADD_NUM==head)	   //队列满
-	{
-		return;
-	}
-	else		              //队列未满
-	{
-		if (full_write_sd(tail+SD_STAT_ADD_START, WriteFWtemp))   //地址写入SD卡	没有写入成功
-		{
-			BeepON();
-			OSTimeDly(50);	
-			BeepOFF();
-		}
-		tail= (tail+1)%SD_STAT_ADD_NUM;
-		WriteFWtemp[0]=tail&0xFF;
-		WriteFWtemp[1]=(tail>>8)&0xFF;
-		WriteFWtemp[2] = (tail>>16)&0xFF;
-		WriteFWtemp[3] = (tail>>24)&0xFF;
-		Write256_full(BUF1ADDR+0x04,WriteFWtemp,4);											 //索引写入队列指针
-	}	
+//	uint8 i;
+//	uint8 ReadFWtemp[8];
+//	uint8 WriteFWtemp[8];
+//	uint32 head,tail;		  //队列头：出队，队列尾：入队。
+//	uint16 year_temp;
+//	V_TIME 	time_temp;
+//	uint16 time_num;
+//	uint32 save_add;
+//
+//	//20140217 增加对参数的判断
+//	if (data == NULL)
+//	{
+//		return;
+//	}
+//
+//	Read256_full(BUF1ADDR,ReadFWtemp,8);	  //读取控制寄存器中的内容
+//	head=ReadFWtemp[0]+(ReadFWtemp[1]<<8)+(ReadFWtemp[2]<<16)+(ReadFWtemp[3]<<24);
+//	tail=ReadFWtemp[4]+(ReadFWtemp[5]<<8) + (ReadFWtemp[6]<<16) + (ReadFWtemp[7]<<24);
+//
+//	year_temp= data[34] + (data[35]<<8) - 2013 ;
+//
+//	time_temp.year = year_temp;	  //一年按照372天计算
+//	time_temp.month = data[36];			  //一个月按照31天计算
+//	time_temp.day = data[37];
+//	time_num = data[39] + (data[40]<<8);    //时间序号，一天按照时间序号1-1440计算
+//
+//	//取得写入的地址
+//	save_add = SD_STAT_START + ((time_temp.year * 372 * 288) + ((time_temp.month-1) * 31 * 288) + 
+//				((time_temp.day-1) * 288) + time_num -1 )%	SD_STAT_BLOCK_NUM;
+//
+//	for (i = 0; i < 4; i++)
+//	{
+//		WriteFWtemp[i] = SD_BLOCK_HEAD[i];
+//	} 
+//	WriteFWtemp[4] = save_add&0xFF;
+//	WriteFWtemp[5] = (save_add>>8)&0xFF;
+//	WriteFWtemp[6] = (save_add>>16)&0xFF;
+//	WriteFWtemp[7] = (save_add>>24)&0xFF;
+//
+//	if((tail+1)%SD_STAT_ADD_NUM==head)	   //队列满
+//	{
+//		return;
+//	}
+//	else		              //队列未满
+//	{
+////		if (full_write_sd(tail+SD_STAT_ADD_START, WriteFWtemp))   //地址写入SD卡	没有写入成功
+//		{
+//			BeepON();
+//			OSTimeDly(50);	
+//			BeepOFF();
+//		}
+//		tail= (tail+1)%SD_STAT_ADD_NUM;
+//		WriteFWtemp[0]=tail&0xFF;
+//		WriteFWtemp[1]=(tail>>8)&0xFF;
+//		WriteFWtemp[2] = (tail>>16)&0xFF;
+//		WriteFWtemp[3] = (tail>>24)&0xFF;
+//		Write256_full(BUF1ADDR+0x04,WriteFWtemp,4);											 //索引写入队列指针
+//	}	
 }
 
-uint8 SD_DataAdd_Read(uint8 *data)
-{
-	uint8 ReadFWtemp[512];
-	uint8 WriteFWtemp[8];
-	uint32 head,tail;		  //队列头：出队，队列尾：入队。
-	uint32 read_add;
-	int i;
-	uint16 len;
-
-	//20140217 增加对参数的判断
-	if (data == NULL)
-	{
-		return 2;
-	}
-
-	Read256_full(BUF1ADDR,ReadFWtemp,8);	  //读取控制寄存器中的内容
-	head=ReadFWtemp[0]+(ReadFWtemp[1]<<8) + (ReadFWtemp[2]<<16) + (ReadFWtemp[3]<<24);
-	tail=ReadFWtemp[4]+(ReadFWtemp[5]<<8) + (ReadFWtemp[6]<<16) + (ReadFWtemp[7]<<24);
-
-	if(tail==head)   //队列空
-	{
-		return 1;
-	}
-	else
-	{
-//		ReadC256(BUF1ADDR+0x200+head*4,ReadFWtemp,4);		//出队操作
-		if (full_read_sd(head+SD_STAT_ADD_START, ReadFWtemp))	//从SD卡中读取数据地址	  没有读取成功
-		{
-			BeepON();
-			OSTimeDly(50);	
-			BeepOFF();
-		}         
-		if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
-			(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
-		{
-			read_add = ReadFWtemp[4]+(ReadFWtemp[5]<<8)+(ReadFWtemp[6]<<16)+(ReadFWtemp[7]<<24);
-		}
-		head=(head+1)%SD_STAT_ADD_NUM;
-		WriteFWtemp[0]=head&0xFF;
-		WriteFWtemp[1]=(head>>8)&0xFF;
-		WriteFWtemp[2]=(head>>16)&0xFF;
-		WriteFWtemp[3]=(head>>24)&0xFF;
-		Write256_full(BUF1ADDR,WriteFWtemp,4);
-
-		if (full_read_sd(read_add,ReadFWtemp))
-		{
-			BeepON();
-			OSTimeDly(50);	
-			BeepOFF();
-		}
-		len=0;															
-		if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
-			(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
-		{
-			len = ReadFWtemp[9] + (ReadFWtemp[10]<<8);
-			for(i=0;i<len;i++)
-			{
-				data[i]=ReadFWtemp[12+i];
-			}
-			return 0;
-		}
-		else
-		{
-			return 2;
-		}
-
-	}
-}
+//uint8 SD_DataAdd_Read(uint8 *data)
+//{
+//	uint8 ReadFWtemp[512];
+//	uint8 WriteFWtemp[8];
+//	uint32 head,tail;		  //队列头：出队，队列尾：入队。
+//	uint32 read_add;
+//	int i;
+//	uint16 len;
+//
+//	//20140217 增加对参数的判断
+//	if (data == NULL)
+//	{
+//		return 2;
+//	}
+//
+//	Read256_full(BUF1ADDR,ReadFWtemp,8);	  //读取控制寄存器中的内容
+//	head=ReadFWtemp[0]+(ReadFWtemp[1]<<8) + (ReadFWtemp[2]<<16) + (ReadFWtemp[3]<<24);
+//	tail=ReadFWtemp[4]+(ReadFWtemp[5]<<8) + (ReadFWtemp[6]<<16) + (ReadFWtemp[7]<<24);
+//
+//	if(tail==head)   //队列空
+//	{
+//		return 1;
+//	}
+//	else
+//	{
+////		ReadC256(BUF1ADDR+0x200+head*4,ReadFWtemp,4);		//出队操作
+//		if (full_read_sd(head+SD_STAT_ADD_START, ReadFWtemp))	//从SD卡中读取数据地址	  没有读取成功
+//		{
+//			BeepON();
+//			OSTimeDly(50);	
+//			BeepOFF();
+//		}         
+//		if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
+//			(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
+//		{
+//			read_add = ReadFWtemp[4]+(ReadFWtemp[5]<<8)+(ReadFWtemp[6]<<16)+(ReadFWtemp[7]<<24);
+//		}
+//		head=(head+1)%SD_STAT_ADD_NUM;
+//		WriteFWtemp[0]=head&0xFF;
+//		WriteFWtemp[1]=(head>>8)&0xFF;
+//		WriteFWtemp[2]=(head>>16)&0xFF;
+//		WriteFWtemp[3]=(head>>24)&0xFF;
+//		Write256_full(BUF1ADDR,WriteFWtemp,4);
+//
+//		if (full_read_sd(read_add,ReadFWtemp))
+//		{
+//			BeepON();
+//			OSTimeDly(50);	
+//			BeepOFF();
+//		}
+//		len=0;															
+//		if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
+//			(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
+//		{
+//			len = ReadFWtemp[9] + (ReadFWtemp[10]<<8);
+//			for(i=0;i<len;i++)
+//			{
+//				data[i]=ReadFWtemp[12+i];
+//			}
+//			return 0;
+//		}
+//		else
+//		{
+//			return 2;
+//		}
+//
+//	}
+//}
 /****************************更新VehSendInfo结构体数组*****************************/
 //
 /****************************更新VehSendInfo结构体数组*****************************/
@@ -333,150 +333,150 @@ void 	Task_SendUart1(void *tdata)
 
 void Task_Uart1_Senddata(void *tdata)
 {
-	uint8 err;
-	uint8 l_flag_send01=0;
-	uint8 wtemp[8]={0};
-	uint16 ReadLen=0;
-	uint8 i=0;
-	uint16 len=0;
-	uint8 R_Buf[64]={0};
-	uint16  l_u16PackageSeq = 0;
-
-    tdata =tdata;
-	Update_data02(); 
-    Update_data08();
-
-	WDTIM_COUNTER	= 1;									/* 喂狗							*/
-
-	if (SETUPALIAS.resetCnt == 1)
-	{
-		Write256_full(BUF1ADDR,wtemp,8);	//铁电中的头尾队列号清零FIFO
-	}
-
-	while(1)
-	{
-		OSTimeDly(5);
-			
-		 //发送设备实时交通数据包：01数据包
-		 //SendData();//	数据发送函数，可以自动添加帧头、帧尾、CRC校验、数据长度
-//		 if(Flag_NetConnect == 1)
-//		 {
-		 	if(stat_tosend_flag==1)			 //5分钟
-			{  
-			   stat_tosend_flag=0;
-			   
-			   ReadLen = (uint16)(HSU1_LEVEL & 0xff);
-               if(ReadLen ==0x40)
-			   {			                                                                    /* 保存的数据在中断中处理       */          
-		           for (i=0; i < ReadLen; i++) 
-				   {
-		            R_Buf[i] = (uint8)(HSU1_RX & 0xff);                       /* 接收数据存入接收缓冲区       */
-		           }
-//				   HSU1_IIR = 0x00 ;
-			   }
-				//添加异常波形处理 20140314
-				if (Flag_NetConnect)//数据波形正常且网络连接正常
-				{
-					len = Save_data_01_process(); //存
-				}
-				
-				//20140217 增加
-				save01_to_sd(Send_data01_temp,len);//存储01包数据到SD卡
-				
-				Update_data02();
-			 	Send1Data( Send_data02,18);//发送02包；
-			 	EVENT_02Rev->OSEventCnt = 0;
-			 	OSSemPend(EVENT_02Rev,5000,&err);	// 等待02包返回。 10s;
-
-			 	if(err == OS_NO_ERR)
-			  	{
-			  	   g_u8Flag_wireless = 1;
-				   Update_data08();
-				   Send1Data(Send_data08,65);   //发送08包
-				   OSTimeDly(800);
-			  	}
-				else
-				{
-					Update_data02();
-			 		Send1Data( Send_data02,18);//发送02包；
-			 		EVENT_02Rev->OSEventCnt = 0;
-			 		OSSemPend(EVENT_02Rev,5000,&err);	// 等待02包返回。 10s;
-
-			 		if(err == OS_NO_ERR)
-			  		{
-			  		   	g_u8Flag_wireless = 1;
-				 		Update_data08();
-					   	Send1Data(Send_data08,65);   //发送08包
-				   		OSTimeDly(800);
-			  		}
-					else
-					{
-						g_u8Flag_wireless = 0;	
-					}
-				}
-				
-				if(g_u8Flag_wireless == 0)
-				{
-					SD_DataAdd_Save(Send_data01_temp);		 //存储当前统计帧
-				}
-				else
-				{
-					Send1Data(Send_data01_temp,len);
-					EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
-					OSSemPend(EVENT_0ARev,5000,&err);
-
-					if(err == OS_NO_ERR)
-					{	
-					 	l_flag_send01 = 1;//确认发送成功；
-					
-					}
-					else
-					{
-						Send1Data(Send_data01_temp,len);
-						EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
-						OSSemPend(EVENT_0ARev,5000,&err);
-
-						if(err == OS_NO_ERR)
-						{	
-					 		l_flag_send01 = 1;//确认发送成功；
-						}
-						else
-						{
-						 	l_flag_send01 = 0;//两次均未成功；
-						}
-					}
-					if(l_flag_send01==1)
-					{
-						while(0==SD_DataAdd_Read(Send_data01_temp))	 //取出铁电数据	返回：0：正确取出，1：铁电已空，2：超时无响应
-						{
-							Send1Data(Send_data01_temp,len);		//发送
-			  				uart1_send_count = uart1_send_count +1;
-			  				//发送01数据包；		  //会收到回复的0A数据包。
-							EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
-			  				OSSemPend(EVENT_0ARev,5000,&err);	//等待0A包返回。2500--5s; 10000--20s;
-
-							if(err != OS_NO_ERR)  //没有发送成功
-							{
-								SD_DataAdd_Save(Send_data01_temp); //存回去
-								OSRec0A1_count = OSRec0A1_count + 1;
-								break;
-							}
-						}	
-					 }
-					 else
-					 {
-					 	SD_DataAdd_Save(Send_data01_temp);		 //连上了但是发送存储当前统计帧	
-					 }
-				}	
-				
-			}
-			else 
-			{
-				//new char;
-				OSTimeDly(5);  //10s
-			}
-//		}
-	}
+//	uint8 err;
+//	uint8 l_flag_send01=0;
+//	uint8 wtemp[8]={0};
+//	uint16 ReadLen=0;
+//	uint8 i=0;
+//	uint16 len=0;
+//	uint8 R_Buf[64]={0};
+//	uint16  l_u16PackageSeq = 0;
+//
+//    tdata =tdata;
+//	Update_data02(); 
+//    Update_data08();
+//
+//	WDTIM_COUNTER	= 1;									/* 喂狗							*/
+//
+//	if (SETUPALIAS.resetCnt == 1)
+//	{
+//		Write256_full(BUF1ADDR,wtemp,8);	//铁电中的头尾队列号清零FIFO
+//	}
+//
+//	while(1)
+//	{
+//		OSTimeDly(5);
+//			
+//		 //发送设备实时交通数据包：01数据包
+//		 //SendData();//	数据发送函数，可以自动添加帧头、帧尾、CRC校验、数据长度
+////		 if(Flag_NetConnect == 1)
+////		 {
+//		 	if(stat_tosend_flag==1)			 //5分钟
+//			{  
+//			   stat_tosend_flag=0;
+//			   
+//			   ReadLen = (uint16)(HSU1_LEVEL & 0xff);
+//               if(ReadLen ==0x40)
+//			   {			                                                                    /* 保存的数据在中断中处理       */          
+//		           for (i=0; i < ReadLen; i++) 
+//				   {
+//		            R_Buf[i] = (uint8)(HSU1_RX & 0xff);                       /* 接收数据存入接收缓冲区       */
+//		           }
+////				   HSU1_IIR = 0x00 ;
+//			   }
+//				//添加异常波形处理 20140314
+//				if (Flag_NetConnect)//数据波形正常且网络连接正常
+//				{
+//					len = Save_data_01_process(); //存
+//				}
+//				
+//				//20140217 增加
+//				save01_to_sd(Send_data01_temp,len);//存储01包数据到SD卡
+//				
+//				Update_data02();
+//			 	Send1Data( Send_data02,18);//发送02包；
+//			 	EVENT_02Rev->OSEventCnt = 0;
+//			 	OSSemPend(EVENT_02Rev,5000,&err);	// 等待02包返回。 10s;
+//
+//			 	if(err == OS_NO_ERR)
+//			  	{
+//			  	   g_u8Flag_wireless = 1;
+//				   Update_data08();
+//				   Send1Data(Send_data08,65);   //发送08包
+//				   OSTimeDly(800);
+//			  	}
+//				else
+//				{
+//					Update_data02();
+//			 		Send1Data( Send_data02,18);//发送02包；
+//			 		EVENT_02Rev->OSEventCnt = 0;
+//			 		OSSemPend(EVENT_02Rev,5000,&err);	// 等待02包返回。 10s;
+//
+//			 		if(err == OS_NO_ERR)
+//			  		{
+//			  		   	g_u8Flag_wireless = 1;
+//				 		Update_data08();
+//					   	Send1Data(Send_data08,65);   //发送08包
+//				   		OSTimeDly(800);
+//			  		}
+//					else
+//					{
+//						g_u8Flag_wireless = 0;	
+//					}
+//				}
+//				
+//				if(g_u8Flag_wireless == 0)
+//				{
+//					SD_DataAdd_Save(Send_data01_temp);		 //存储当前统计帧
+//				}
+//				else
+//				{
+//					Send1Data(Send_data01_temp,len);
+//					EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
+//					OSSemPend(EVENT_0ARev,5000,&err);
+//
+//					if(err == OS_NO_ERR)
+//					{	
+//					 	l_flag_send01 = 1;//确认发送成功；
+//					
+//					}
+//					else
+//					{
+//						Send1Data(Send_data01_temp,len);
+//						EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
+//						OSSemPend(EVENT_0ARev,5000,&err);
+//
+//						if(err == OS_NO_ERR)
+//						{	
+//					 		l_flag_send01 = 1;//确认发送成功；
+//						}
+//						else
+//						{
+//						 	l_flag_send01 = 0;//两次均未成功；
+//						}
+//					}
+//					if(l_flag_send01==1)
+//					{
+////						while(0==SD_DataAdd_Read(Send_data01_temp))	 //取出铁电数据	返回：0：正确取出，1：铁电已空，2：超时无响应
+////						{
+////							Send1Data(Send_data01_temp,len);		//发送
+////			  				uart1_send_count = uart1_send_count +1;
+////			  				//发送01数据包；		  //会收到回复的0A数据包。
+////							EVENT_0ARev->OSEventCnt = 0;       //20130617 防止单点多传多重接收出现问题
+////			  				OSSemPend(EVENT_0ARev,5000,&err);	//等待0A包返回。2500--5s; 10000--20s;
+////
+////							if(err != OS_NO_ERR)  //没有发送成功
+////							{
+////								SD_DataAdd_Save(Send_data01_temp); //存回去
+////								OSRec0A1_count = OSRec0A1_count + 1;
+////								break;
+////							}
+////						}	
+//					 }
+//					 else
+//					 {
+//					 	SD_DataAdd_Save(Send_data01_temp);		 //连上了但是发送存储当前统计帧	
+//					 }
+//				}	
+//				
+//			}
+//			else 
+//			{
+//				//new char;
+//				OSTimeDly(5);  //10s
+//			}
+////		}
+//	}
 }
 // 	   INT8U err;
 //		   
@@ -505,44 +505,44 @@ void Task_Uart1_Senddata(void *tdata)
 /****************************************************/
 uint8 ReadData_FromSD(uint8* const data, uint16* const pDataLen, const uint16 u16PackageSeq, const uint8 u8TimeFlag)
 {
-	uint8 ReadFWtemp[512]; 	
-	uint16 len;
-	uint32 read_add;
-	int i;
-
-	if (data == NULL || pDataLen == NULL)
-	{
-		return 2;
-	}
-	//取上个相同星期相同时段的数据 先计算地址
-	read_add = GetData_SDAdd(u16PackageSeq, u8TimeFlag);
-	if (!read_add)
-	{	//没有取得地址  返回异常
-		return 2;
-	}
-	if (full_read_sd(read_add,ReadFWtemp))
-	{
-		BeepON();
-		OSTimeDly(50);	
-		BeepOFF();
-	}
-	len=0;															
-	if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
-		(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
-	{
-		len = ReadFWtemp[9] + (ReadFWtemp[10]<<8);
-		if (len >= (500-12))
-		{
-			return 2;
-		} 
-		for(i=0;i<len;i++)
-		{
-			data[i]=ReadFWtemp[12+i];
-		}
-		*pDataLen = len;
-		return 0;
-	}
-	else
+//	uint8 ReadFWtemp[512]; 	
+//	uint16 len;
+//	uint32 read_add;
+//	int i;
+//
+//	if (data == NULL || pDataLen == NULL)
+//	{
+//		return 2;
+//	}
+//	//取上个相同星期相同时段的数据 先计算地址
+//	read_add = GetData_SDAdd(u16PackageSeq, u8TimeFlag);
+//	if (!read_add)
+//	{	//没有取得地址  返回异常
+//		return 2;
+//	}
+////	if (full_read_sd(read_add,ReadFWtemp))
+//	{
+//		BeepON();
+//		OSTimeDly(50);	
+//		BeepOFF();
+//	}
+//	len=0;															
+//	if( (ReadFWtemp[0]==SD_BLOCK_HEAD[0])&&(ReadFWtemp[1]==SD_BLOCK_HEAD[1])&&
+//		(ReadFWtemp[2]==SD_BLOCK_HEAD[2])&&(ReadFWtemp[3]==SD_BLOCK_HEAD[3]) )   //block头对了
+//	{
+//		len = ReadFWtemp[9] + (ReadFWtemp[10]<<8);
+//		if (len >= (500-12))
+//		{
+//			return 2;
+//		} 
+//		for(i=0;i<len;i++)
+//		{
+//			data[i]=ReadFWtemp[12+i];
+//		}
+//		*pDataLen = len;
+//		return 0;
+//	}
+//	else
 	{
 		return 1;
 	}

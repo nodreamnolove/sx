@@ -73,7 +73,7 @@ void InitAllSP(uint32 p_u32U2, uint32 p_u32U3, uint32 p_u32U5)
 	UART5Init(p_u32U5);	//串口5
 	UART1_Init();	  	//串口1波特率为57600
 
-	memcpy(&g_sniLocal, (uint8 *)&SETUPALIAS.VerticalLaser_IP, 38);
-	
+	memcpy(&g_sniLocal, (uint8 *)&SETUPALIAS.u32LocalIPAddress, sizeof(NetInfo)-2);
+
 	InitializeW5100(&g_sniLocal);//
 }

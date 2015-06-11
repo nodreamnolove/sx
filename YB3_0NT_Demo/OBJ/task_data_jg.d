@@ -34,3 +34,4 @@
 ..\OBJ\task_data_jg.o: ..\SRC\JG\JG.h
 ..\OBJ\task_data_jg.o: ..\SRC\AppDriver\UART5.h
 ..\OBJ\task_data_jg.o: ..\SRC\Include\crc.h
+..\OBJ\task_data_jg.o: ..\SRC\Task\sort.h

@@ -79,8 +79,8 @@ extern int sv_send_fifotail;
 
 extern OS_EVENT *FW_flag;
 extern OS_EVENT *SD_flag;
-extern OS_EVENT *NET_flag;
-extern OS_EVENT *W_R_FW_flag;
+
+
 
 extern uint32 gv_index;
 extern uint8 frame11_buf[57];

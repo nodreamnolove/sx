@@ -1216,48 +1216,48 @@ static void SendDevParamInfo(void)
 	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u8BaudRate;//6；波特率
 	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u8DOG;	 //7
 	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u8TrafficType; //-8
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.HeightLaser0>>8)&0xFF; //9-10
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.HeightLaser0 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.HeightLaser1>>8)&0xFF; //9-10
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.HeightLaser1 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.HeightLaser2>>8)&0xFF; //9-10
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.HeightLaser2 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.HeightLaser3>>8)&0xFF; //9-10
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.HeightLaser3 & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.J0_Height>>8)&0xFF; //9-10
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.J0_Height & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.J1_Height>>8)&0xFF; //9-10
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.J1_Height & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.J2_Height>>8)&0xFF; //9-10
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.J2_Height & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.J3_Height>>8)&0xFF; //9-10
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.J3_Height & 0xFF;
 //	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.IncHeightLaser>>8) & 0xFF;//
 //	u8tempBuf[u8tempIndex++] = TmpDevSetParam.IncHeightLaser & 0xFF;
 	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.LaserDistance>>8)&0xFF;//13-14
 	u8tempBuf[u8tempIndex++] = TmpDevSetParam.LaserDistance & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.n32LaserHorizOff>>8)&0xFF;//15-16
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.n32LaserHorizOff & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u32LaserRoadAngle>>8)&0xFF;		//17-18		 //原寻高起始点，现激光扫描截面偏角
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u32LaserRoadAngle & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16VerticalZeroPos0>>8)&0xFF;//19-20
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16VerticalZeroPos0 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16VerticalZeroPos1>>8)&0xFF;//19-20
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16VerticalZeroPos1 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16VerticalZeroPos2>>8)&0xFF;//19-20
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16VerticalZeroPos2 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16VerticalZeroPos3>>8)&0xFF;//19-20
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16VerticalZeroPos3 & 0xFF;
+//	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.n32LaserHorizOff>>8)&0xFF;//15-16
+//	u8tempBuf[u8tempIndex++] = TmpDevSetParam.n32LaserHorizOff & 0xFF;
+//	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u32LaserRoadAngle>>8)&0xFF;		//17-18		 //原寻高起始点，现激光扫描截面偏角
+//	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u32LaserRoadAngle & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J0ZeroPos>>8)&0xFF;//19-20
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J0ZeroPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J1ZeroPos>>8)&0xFF;//19-20
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J1ZeroPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J2ZeroPos>>8)&0xFF;//19-20
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J2ZeroPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J3ZeroPos>>8)&0xFF;//19-20
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J3ZeroPos & 0xFF;
 //	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16InclineZeroPos>>8)&0xFF;//21-22
 //	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16InclineZeroPos & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16StartPtNum0>>8)&0xFF;// 23-24
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16StartPtNum0 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16EndPtNum0>>8)&0xFF;  //25-26
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16EndPtNum0 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16StartPtNum1>>8)&0xFF;// 23-24
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16StartPtNum1 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16EndPtNum1>>8)&0xFF;  //25-26
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16EndPtNum1 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16StartPtNum2>>8)&0xFF;// 23-24
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16StartPtNum2 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16EndPtNum2>>8)&0xFF;  //25-26
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16EndPtNum2 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16StartPtNum3>>8)&0xFF;// 23-24
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16StartPtNum3 & 0xFF;
-	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16EndPtNum3>>8)&0xFF;  //25-26
-	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16EndPtNum3 & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J0StartPos>>8)&0xFF;// 23-24
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J0StartPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J0EndPos>>8)&0xFF;  //25-26
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J0EndPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J1StartPos>>8)&0xFF;// 23-24
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J1StartPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J1EndPos>>8)&0xFF;  //25-26
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J1EndPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J2StartPos>>8)&0xFF;// 23-24
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J2StartPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J2EndPos>>8)&0xFF;  //25-26
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J2EndPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J3StartPos>>8)&0xFF;// 23-24
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J3StartPos & 0xFF;
+	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.u16J3EndPos>>8)&0xFF;  //25-26
+	u8tempBuf[u8tempIndex++] = TmpDevSetParam.u16J3EndPos & 0xFF;
 	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.MedianLeftWide>>8)&0xFF;//27-28
 	u8tempBuf[u8tempIndex++] = TmpDevSetParam.MedianLeftWide & 0xFF;
 	u8tempBuf[u8tempIndex++] = (TmpDevSetParam.MedianWide>>8)&0xFF;//29-30	 //原隔离带右侧宽度，现隔离带宽度
@@ -1301,22 +1301,22 @@ void SendDevParamInfor2(void)
 	
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8BaudRate;
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8DOG;
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser0>>24;	   //激光器垂直高度值
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser0>>16)&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser0>>8)&0xFF;                           	  	  
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser0&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser1>>24;	   //激光器垂直高度值
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser1>>16)&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser1>>8)&0xFF;                           	  	  
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser1&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser2>>24;	   //激光器垂直高度值
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser2>>16)&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser2>>8)&0xFF;                           	  	  
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser2&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser3>>24;	   //激光器垂直高度值
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser3>>16)&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser3>>8)&0xFF;                           	  	  
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser3&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Height>>24;	   //激光器垂直高度值
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Height>>16)&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Height>>8)&0xFF;                           	  	  
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Height&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Height>>24;	   //激光器垂直高度值
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Height>>16)&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Height>>8)&0xFF;                           	  	  
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Height&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Height>>24;	   //激光器垂直高度值
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Height>>16)&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Height>>8)&0xFF;                           	  	  
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Height&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Height>>24;	   //激光器垂直高度值
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Height>>16)&0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Height>>8)&0xFF;                           	  	  
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Height&0xFF;
 //	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.IncHeightLaser>>24;		
 //	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.IncHeightLaser>>16)&0xFF;
 //	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.IncHeightLaser>>8)&0xFF;                              //%车道宽度
@@ -1362,50 +1362,50 @@ void SendDevParamInfor2(void)
 	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.resetCnt>>8)&0xFF;    
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt&0xFF;
 
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle>>24;   //激光扫描截面偏角，（原寻高起始点）
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>16)&0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>8)&0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle&0xFF;
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle>>24;   //激光扫描截面偏角，（原寻高起始点）
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>16)&0xFF;
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>8)&0xFF;    
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle&0xFF;
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_IP>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_IP>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_IP>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_IP & 0xFF;					
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_IP>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_IP>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_IP>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_IP & 0xFF;					
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_Port>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_Port>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_Port>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_Port & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Port>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Port>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Port>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Port & 0xFF;
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP1>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP1>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP1>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP1 & 0xFF;					
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_IP>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_IP>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_IP>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_IP & 0xFF;					
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port1>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port1>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port1>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port1 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Port>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Port>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Port>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Port & 0xFF;
 //2014-12-04
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP2>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP2>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP2>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP2 & 0xFF;					
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_IP>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_IP>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_IP>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_IP & 0xFF;					
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port2>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port2>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port2>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port2 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Port>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Port>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Port>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Port & 0xFF;
 
-		l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP3>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP3>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP3>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP3 & 0xFF;					
+		l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_IP>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_IP>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_IP>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_IP & 0xFF;					
 	
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port3>>24;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port3>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port3>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port3 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Port>>24;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Port>>16) & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Port>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Port & 0xFF;
 //2014-12-04
 //控制器ip参数					
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalIPAddress>>24;
@@ -1457,53 +1457,53 @@ void SendDevParamInfor2(void)
 	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net2_InvalidRecNum>>8) & 0xFF;    
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net2_InvalidRecNum & 0xFF;			
 	//5:
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException>>24;	  //处理异常码
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException & 0xFF;			
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException>>24;	  //处理异常码
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>16) & 0xFF;
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>8) & 0xFF;    
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException & 0xFF;			
 	
 
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff>>24;		  //激光器与行车道距离，原激光器水平偏移
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>16) & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff & 0xFF;
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff>>24;		  //激光器与行车道距离，原激光器水平偏移
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>16) & 0xFF;
+//	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>8) & 0xFF;    
+//	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff & 0xFF;
 // 垂直
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos0>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos0 & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos1>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos1 & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos2>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos2 & 0xFF;
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos3>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos3 & 0xFF;			
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0ZeroPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0ZeroPos & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1ZeroPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1ZeroPos & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2ZeroPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2ZeroPos & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3ZeroPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3ZeroPos & 0xFF;			
 ////倾斜			
 //	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16InclineZeroPos>>8) & 0xFF;    
 //	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16InclineZeroPos & 0xFF;
 //起始点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum0>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum0 & 0xFF;						
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0StartPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0StartPos & 0xFF;						
 //终止点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum0>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum0 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0EndPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0EndPos & 0xFF;
 
 	//起始点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum1>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum1 & 0xFF;						
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1StartPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1StartPos & 0xFF;						
 //终止点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum1>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum1 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1EndPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1EndPos & 0xFF;
 	//起始点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum2>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum2 & 0xFF;						
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2StartPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2StartPos & 0xFF;						
 //终止点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum2>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum2 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2EndPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2EndPos & 0xFF;
 	//起始点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum3>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum3 & 0xFF;						
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3StartPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3StartPos & 0xFF;						
 //终止点			
-	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum3>>8) & 0xFF;    
-	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum3 & 0xFF;
+	l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3EndPos>>8) & 0xFF;    
+	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3EndPos & 0xFF;
 	
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8LaserDevType;	 //激光类型 施克 万集
 	l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8TrafficType;	 //交调 车检器
@@ -1636,22 +1636,22 @@ void SetDevParamInfor(uint8 *pUartDataBuf)
 
 	SETUPALIAS.u8BaudRate = l_u8PCProtocolBuf[tempindex++];		//2
 	SETUPALIAS.u8DOG = l_u8PCProtocolBuf[tempindex++];			// 3
-	SETUPALIAS.HeightLaser0 = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
+	SETUPALIAS.J0_Height = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 	tempindex += 4;
-	SETUPALIAS.HeightLaser1 = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
+	SETUPALIAS.J1_Height = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 	tempindex += 4;
-	SETUPALIAS.HeightLaser2 = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
+	SETUPALIAS.J2_Height = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 	tempindex += 4;
-	SETUPALIAS.HeightLaser3 = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
+	SETUPALIAS.J3_Height = (l_u8PCProtocolBuf[tempindex]<<24)		//	   4
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
@@ -1700,44 +1700,44 @@ void SetDevParamInfor(uint8 *pUartDataBuf)
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
+//	tempindex += 4;
+//	SETUPALIAS.u32LaserRoadAngle = (l_u8PCProtocolBuf[tempindex]<<24)			// 36
+//							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+//							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+//							+ l_u8PCProtocolBuf[tempindex+3];
+
 	tempindex += 4;
-	SETUPALIAS.u32LaserRoadAngle = (l_u8PCProtocolBuf[tempindex]<<24)			// 36
+	SETUPALIAS.J0_IP = (l_u8PCProtocolBuf[tempindex]<<24)		   //	40
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 
 	tempindex += 4;
-	SETUPALIAS.VerticalLaser_IP = (l_u8PCProtocolBuf[tempindex]<<24)		   //	40
+	SETUPALIAS.J0_Port = (l_u8PCProtocolBuf[tempindex]<<24)			  //44
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 
 	tempindex += 4;
-	SETUPALIAS.VerticalLaser_Port = (l_u8PCProtocolBuf[tempindex]<<24)			  //44
+	SETUPALIAS.J1_IP = (l_u8PCProtocolBuf[tempindex]<<24)				//	  48
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 
 	tempindex += 4;
-	SETUPALIAS.ParallerLaser_IP1 = (l_u8PCProtocolBuf[tempindex]<<24)				//	  48
-							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-							+ l_u8PCProtocolBuf[tempindex+3];
-
-	tempindex += 4;
-	SETUPALIAS.ParallerLaser_Port1 = (l_u8PCProtocolBuf[tempindex]<<24)			//		52
+	SETUPALIAS.J1_Port = (l_u8PCProtocolBuf[tempindex]<<24)			//		52
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 //2014-12-04
 	tempindex += 4;
-	SETUPALIAS.ParallerLaser_IP2 = (l_u8PCProtocolBuf[tempindex]<<24)				//	  48
+	SETUPALIAS.J2_IP = (l_u8PCProtocolBuf[tempindex]<<24)				//	  48
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 
 	tempindex += 4;
-	SETUPALIAS.ParallerLaser_Port2 = (l_u8PCProtocolBuf[tempindex]<<24)			//		52
+	SETUPALIAS.J2_Port = (l_u8PCProtocolBuf[tempindex]<<24)			//		52
 							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
@@ -1796,29 +1796,29 @@ void SetDevParamInfor(uint8 *pUartDataBuf)
 							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 							+ l_u8PCProtocolBuf[tempindex+3];
 
-	tempindex += 4;
-	SETUPALIAS.u32DataProcException = (l_u8PCProtocolBuf[tempindex]<<24)		   //
-							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-							+ l_u8PCProtocolBuf[tempindex+3];
-	tempindex += 4;
-
-	SETUPALIAS.n32LaserHorizOff = (l_u8PCProtocolBuf[tempindex]<<24)			   //
-							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-							+ l_u8PCProtocolBuf[tempindex+3];
+//	tempindex += 4;
+//	SETUPALIAS.u32DataProcException = (l_u8PCProtocolBuf[tempindex]<<24)		   //
+//							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+//							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+//							+ l_u8PCProtocolBuf[tempindex+3];
+//	tempindex += 4;
+//
+//	SETUPALIAS.n32LaserHorizOff = (l_u8PCProtocolBuf[tempindex]<<24)			   //
+//							+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+//							+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+//							+ l_u8PCProtocolBuf[tempindex+3];
     tempindex += 4;
 		//u16VerticalZeroPos set//
-	SETUPALIAS.u16VerticalZeroPos0 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J0ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
-	SETUPALIAS.u16VerticalZeroPos1 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J1ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
-	SETUPALIAS.u16VerticalZeroPos2 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J2ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
-	SETUPALIAS.u16VerticalZeroPos3 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J3ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 		//u16VerticalZeroPos set//
@@ -1826,33 +1826,33 @@ void SetDevParamInfor(uint8 *pUartDataBuf)
 //			+ l_u8PCProtocolBuf[tempindex+1];
 //	tempindex += 2;
 		//u16InclineZeroPos set//
-	SETUPALIAS.u16StartPtNum0 =(l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J0StartPos =(l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 		//u16StartPtNum set//
-	SETUPALIAS.u16EndPtNum0 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J0EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 
-		SETUPALIAS.u16StartPtNum1 =(l_u8PCProtocolBuf[tempindex]<<8)
+		SETUPALIAS.u16J1StartPos =(l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 		//u16StartPtNum set//
-	SETUPALIAS.u16EndPtNum1 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J1EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
-		SETUPALIAS.u16StartPtNum2 =(l_u8PCProtocolBuf[tempindex]<<8)
-			+ l_u8PCProtocolBuf[tempindex+1];
-	tempindex += 2;
-		//u16StartPtNum set//
-	SETUPALIAS.u16EndPtNum2 = (l_u8PCProtocolBuf[tempindex]<<8)
-			+ l_u8PCProtocolBuf[tempindex+1];
-	tempindex += 2;
-		SETUPALIAS.u16StartPtNum3 =(l_u8PCProtocolBuf[tempindex]<<8)
+		SETUPALIAS.u16J2StartPos =(l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 		//u16StartPtNum set//
-	SETUPALIAS.u16EndPtNum3 = (l_u8PCProtocolBuf[tempindex]<<8)
+	SETUPALIAS.u16J2EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
+			+ l_u8PCProtocolBuf[tempindex+1];
+	tempindex += 2;
+		SETUPALIAS.u16J3StartPos =(l_u8PCProtocolBuf[tempindex]<<8)
+			+ l_u8PCProtocolBuf[tempindex+1];
+	tempindex += 2;
+		//u16StartPtNum set//
+	SETUPALIAS.u16J3EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
 			+ l_u8PCProtocolBuf[tempindex+1];
 	tempindex += 2;
 

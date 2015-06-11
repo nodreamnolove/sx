@@ -138,241 +138,215 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 			memcpy(l_u8PCProtocolBuf+tempindex,SETUPALIAS.au8ProgramVersion,11);	 //版本号
 			tempindex += 11;
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8InstallFlag;         //安装方式 0 侧桩 1 正桩
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DevID>>24; 	 //设备ID 4字节
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DevID>>16; 
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DevID>>8; 
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DevID; 
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8BaudRate;
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8DOG;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser0>>24;	   //激光器垂直高度值
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser0>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser0>>8)&0xFF;                           	  	  
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser0&0xFF; 			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser1>>24;	   //激光器垂直高度值
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser1>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser1>>8)&0xFF;                           	  	  
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser1&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser2>>24;	   //激光器垂直高度值
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser2>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser2>>8)&0xFF;                           	  	  
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser2&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser3>>24;	   //激光器垂直高度值
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser3>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.HeightLaser3>>8)&0xFF;                           	  	  
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.HeightLaser3&0xFF;
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.IncHeightLaser>>24;		
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.IncHeightLaser>>16)&0xFF;
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.IncHeightLaser>>8)&0xFF;                              //%车道宽度
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.IncHeightLaser&0xFF;
-
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.LaserDistance>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.LaserDistance>>16)&0xFF;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8TrafficType; //设备分类
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8NetType; 	  //数据上传类型
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt>>24; //重启次数 4字节
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt>>16; //
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt>>8; 	  //
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt; 	  //
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8LaserDevType; 	  //设备厂家
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8SDEnable;	 	  //SD卡使能
+				   //激光器0高度值
+		
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Height>>8)&0xFF;                           	  	  
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Height&0xFF; 			
+			   //激光器1高度值
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Height>>8)&0xFF;                           	  	  
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Height&0xFF;
+				  //激光器2高度值
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Height>>8)&0xFF;                           	  	  
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Height&0xFF;
+			   //激光器3高度值			   			
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Height>>8)&0xFF;                           	  	  
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Height&0xFF;	   
+			 	//激光器 0和1的水平距离
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.LaserDistance>>8)&0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.LaserDistance&0xFF;
-			
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.Angle12>>24;
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.Angle12>>16)&0xFF;
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.Angle12>>8)&0xFF;    
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.Angle12&0xFF;
-
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.LaneWide>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.LaneWide>>16)&0xFF;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.LaserDistance&0xFF;		  
+				//激光0中心点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0ZeroPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0ZeroPos & 0xFF;
+																			//激光0起始点			
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0StartPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0StartPos & 0xFF;						
+																			 //激光0终止点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J0EndPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J0EndPos & 0xFF;
+																			 //激光1中心点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1ZeroPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1ZeroPos & 0xFF;
+																			  	//1起始点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1StartPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1StartPos & 0xFF;						
+																				//1终止点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J1EndPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J1EndPos & 0xFF;
+																			   //激光2中心点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2ZeroPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2ZeroPos & 0xFF;
+																				 //2起始点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2StartPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2StartPos & 0xFF;						
+																				//2终止点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J2EndPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J2EndPos & 0xFF;
+																			   //激光3中心点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3ZeroPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3ZeroPos & 0xFF;
+																				 //3起始点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3StartPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3StartPos & 0xFF;						
+																				 //3终止点
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16J3EndPos>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16J3EndPos & 0xFF;   			
+																		 //车道宽度	 
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.LaneWide>>8)&0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.LaneWide&0xFF;
-
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.MedianWide>>24;		 //隔离带宽度，原隔离带右边宽度
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.MedianWide>>16)&0xFF;
+																	 //激光0距车道距离
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.MedianWide>>8)&0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.MedianWide&0xFF;
-
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.MedianLeftWide>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.MedianLeftWide>>16)&0xFF;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.MedianWide&0xFF; 
+                                                                   //激光1距车道距离
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.MedianLeftWide>>8)&0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.MedianLeftWide&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.resetCnt>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.resetCnt>>8)&0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.resetCnt&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle>>24;   //激光扫描截面偏角，（原寻高起始点）
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>16)&0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LaserRoadAngle>>8)&0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LaserRoadAngle&0xFF;
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_IP>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_IP>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_IP>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_IP & 0xFF;					
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_Port>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_Port>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.VerticalLaser_Port>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.VerticalLaser_Port & 0xFF;
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP1>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP1>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP1>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP1 & 0xFF;					
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port1>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port1>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port1>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port1 & 0xFF;
-			//2014-12-04新增
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP2>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP2>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP2>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP2 & 0xFF;					
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port2>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port2>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port2>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port2 & 0xFF;
-
-				l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP3>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP3>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_IP3>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_IP3 & 0xFF;					
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port3>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port3>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.ParallerLaser_Port3>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.ParallerLaser_Port3 & 0xFF;
-			//2014-12-04
-//控制器ip参数					
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8LaneNum;	    //车道数
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8RoadType;	    // 道路类型 0-- 国道 1-- 高速
+																		//控制器ip参数					
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalIPAddress>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalIPAddress>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalIPAddress>>8) & 0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalIPAddress & 0xFF;
-			
+																	   //控制器port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalPortNO>>24;
+//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalPortNO>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalPortNO>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalPortNO & 0xFF;	
+
+																	   //控制器子网掩码
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32SubMask>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32SubMask>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32SubMask>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32SubMask & 0xFF;								
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalPortNO>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalPortNO>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32LocalPortNO>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32LocalPortNO & 0xFF;					
-		//网关
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32SubMask & 0xFF;	
+																	  //控制器网关
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32GatewayIP>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32GatewayIP>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32GatewayIP>>8) & 0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32GatewayIP & 0xFF;
-			
-		//	au8LocalMAC
+		   															//控制器mac
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[0];
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[1];
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[2];    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[3];					
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[4];
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[5];																								
-
-//20130424 	1:		
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8LocalMAC[5];
+																	//激光0IP
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_IP>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_IP>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_IP>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_IP & 0xFF;					
+																	//激光0 port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Port>>24;
+//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Port>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J0_Port>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J0_Port & 0xFF;
+																   //激光1 IP
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_IP>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_IP>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_IP>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_IP & 0xFF;					
+																   //激光1 port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Port>>24;
+//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Port>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J1_Port>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J1_Port & 0xFF;
+																  //激光2 IP
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_IP>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_IP>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_IP>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_IP & 0xFF;					
+																 //激光2 port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Port>>24;
+//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Port>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J2_Port>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J2_Port & 0xFF;
+																 //激光3 IP
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_IP>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_IP>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_IP>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_IP & 0xFF;					
+																 //激光3 port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Port>>24;
+//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Port>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.J3_Port>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.J3_Port & 0xFF;
+																 //服务器IP 
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ServerIP>>24;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ServerIP>>16;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ServerIP>>8;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ServerIP;
+																 //服务器 port
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16ServerPort>>24;
+//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16ServerPort>>16;
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16ServerPort>>8;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16ServerPort;
+																			   //网络1断开
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_DisconnectNum>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_DisconnectNum>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_DisconnectNum>>8) & 0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_DisconnectNum & 0xFF;
-			//2:
+																			  //网络1无效
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_InvalidRecNum>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_InvalidRecNum>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_InvalidRecNum>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_InvalidRecNum & 0xFF;
+																			 //网络2断开
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net2_DisconnectNum>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net2_DisconnectNum>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net2_DisconnectNum>>8) & 0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net2_DisconnectNum & 0xFF;
-
-				l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_DisconnectNum>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_DisconnectNum>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_DisconnectNum>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_DisconnectNum & 0xFF;
-			//2:
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_DisconnectNum>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_DisconnectNum>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_DisconnectNum>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_DisconnectNum & 0xFF;
-			//3:
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_InvalidRecNum>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_InvalidRecNum>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net1_InvalidRecNum>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net1_InvalidRecNum & 0xFF;			
-			//4:
+																			//网络2无效
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net2_InvalidRecNum>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net2_InvalidRecNum>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net2_InvalidRecNum>>8) & 0xFF;    
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net2_InvalidRecNum & 0xFF;
-			
-				l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_InvalidRecNum>>24;
+			//2:															 //网络3断开
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_DisconnectNum>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_DisconnectNum>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_DisconnectNum>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_DisconnectNum & 0xFF;
+		
+																		 //网络3无效
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_InvalidRecNum>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_InvalidRecNum>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net3_InvalidRecNum>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_InvalidRecNum & 0xFF;			
-			//4:
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net3_InvalidRecNum & 0xFF;
+																		 //网络4断开
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_DisconnectNum>>24;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_DisconnectNum>>16) & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_DisconnectNum>>8) & 0xFF;    
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_DisconnectNum & 0xFF; 
+																		 //网络4无效
 			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_InvalidRecNum>>24;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_InvalidRecNum>>16) & 0xFF;
 			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32Net4_InvalidRecNum>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_InvalidRecNum & 0xFF;			
-			//5:
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32DataProcException>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32DataProcException & 0xFF;			
-			
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ProgramVersion>>24;
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32ProgramVersion>>16) & 0xFF;
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u32ProgramVersion>>8) & 0xFF;    
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32ProgramVersion & 0xFF;
-
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff>>24;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>16) & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.n32LaserHorizOff>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.n32LaserHorizOff & 0xFF;
-// 垂直
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos0>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos0 & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos1>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos1 & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos2>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos2 & 0xFF;
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16VerticalZeroPos3>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16VerticalZeroPos3 & 0xFF;			
-////倾斜			
-//			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16InclineZeroPos>>8) & 0xFF;    
-//			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16InclineZeroPos & 0xFF;
-//起始点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum0>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum0 & 0xFF;						
-//终止点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum0>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum0 & 0xFF;
-			//起始点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum1>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum1 & 0xFF;						
-//终止点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum1>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum1 & 0xFF;
-			//起始点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum2>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum2 & 0xFF;						
-//终止点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum2>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum2 & 0xFF;
-			//起始点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16StartPtNum3>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16StartPtNum3 & 0xFF;						
-//终止点			
-			l_u8PCProtocolBuf[tempindex++] = (SETUPALIAS.u16EndPtNum3>>8) & 0xFF;    
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u16EndPtNum3 & 0xFF;
-			
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8LaserDevType;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8TrafficType;
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8RoadType;	    // 道路类型 0-- 国道 1-- 高速
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8LaneNum;	    //车道数 
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8NetType;		//网络连接：0 -- 无线 1 -- 有线
-			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u8SDEnable;
-						
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.u32Net4_InvalidRecNum & 0xFF;
+			l_u8PCProtocolBuf[tempindex++] = 0x00;//异常码	
+			l_u8PCProtocolBuf[tempindex++] = 0x00;//异常码	
+			l_u8PCProtocolBuf[tempindex++] = 0x00;//异常码	
+			l_u8PCProtocolBuf[tempindex++] = 0x00;//异常码		
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8ReserveByte[0];// au8ReserveByte3[0]; 预留4字节 
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8ReserveByte[1];//au8ReserveByte3[0]
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8ReserveByte[2];//au8ReserveByte3[0]
+			l_u8PCProtocolBuf[tempindex++] = SETUPALIAS.au8ReserveByte[3];//au8ReserveByte3[0]
 			l_u8PCProtocolBuf[0] = 0xFF;
 			l_u8PCProtocolBuf[1] = 0xFF;
 			l_u8PCProtocolBuf[2] = CMD_QUERYPARAM;					
 			l_u8PCProtocolBuf[3] = ((tempindex + 2)>>8)&0xFF;//协议帧字节数
-			l_u8PCProtocolBuf[4] = (tempindex + 2)&0xFF;
-//			l_u16CRC = AddCrc16(l_u8PCProtocolBuf,tempindex);
-//			l_u8PCProtocolBuf[tempindex++] = (l_u16CRC>>8)&0xFF;//添加CRC校验															  
-//			l_u8PCProtocolBuf[tempindex++] = l_u16CRC&0xFF;
-//
-//			U5SendBytes(l_u8PCProtocolBuf, tempindex + 2);
+			l_u8PCProtocolBuf[4] = (tempindex + 2)&0xFF; 
 			AddCrc16(l_u8PCProtocolBuf,	tempindex);
 			U5SendBytes(l_u8PCProtocolBuf, tempindex + 2);
 			break;
@@ -383,225 +357,197 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 			//跳过版本号设置//
 			tempindex += 11;
 			SETUPALIAS.u8InstallFlag = l_u8PCProtocolBuf[tempindex++];	  //安装方式 0 侧桩 1 正桩 
-			SETUPALIAS.u8BaudRate = l_u8PCProtocolBuf[tempindex++];
-			SETUPALIAS.u8DOG = l_u8PCProtocolBuf[tempindex++];
-			SETUPALIAS.HeightLaser0 = (l_u8PCProtocolBuf[tempindex]<<24)
+			SETUPALIAS.u32DevID	= 	(l_u8PCProtocolBuf[tempindex]<<24)	  // 设备ID
 									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 									+ l_u8PCProtocolBuf[tempindex+3];
 									tempindex += 4;
-		    SETUPALIAS.HeightLaser1 = (l_u8PCProtocolBuf[tempindex]<<24)
+			SETUPALIAS.u8BaudRate = l_u8PCProtocolBuf[tempindex++];	     //波特率
+			SETUPALIAS.u8DOG = l_u8PCProtocolBuf[tempindex++];			 //看门狗
+			SETUPALIAS.u8TrafficType = l_u8PCProtocolBuf[tempindex++];	 //设备分类 
+			SETUPALIAS.u8NetType = l_u8PCProtocolBuf[tempindex++];  	 //上传方式
+			SETUPALIAS.resetCnt = (l_u8PCProtocolBuf[tempindex]<<24)	 //重启次数
 									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-								    tempindex += 4;
-			SETUPALIAS.HeightLaser2 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-									tempindex += 4;
-			SETUPALIAS.HeightLaser3 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];								
-//			tempindex += 4;
-//			SETUPALIAS.IncHeightLaser = (l_u8PCProtocolBuf[tempindex]<<24)
-//									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-//									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-//									+ l_u8PCProtocolBuf[tempindex+3];
-			tempindex += 4;
-			SETUPALIAS.LaserDistance = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-//			tempindex += 4;
-//			SETUPALIAS.Angle12 = (l_u8PCProtocolBuf[tempindex]<<24)
-//									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-//									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-//									+ l_u8PCProtocolBuf[tempindex+3]; 					
-			tempindex += 4;
-			SETUPALIAS.LaneWide = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-			tempindex += 4;
-			SETUPALIAS.MedianWide = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-			tempindex += 4;
-			SETUPALIAS.MedianLeftWide = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ l_u8PCProtocolBuf[tempindex+3]; 
+									tempindex += 4; 
+			SETUPALIAS.u8LaserDevType = l_u8PCProtocolBuf[tempindex++];	 //激光器厂家 
+			SETUPALIAS.u8SDEnable = l_u8PCProtocolBuf[tempindex++];	 //SD卡使能
+			SETUPALIAS.J0_Height = 	 (l_u8PCProtocolBuf[tempindex]<<8) //	激光器 0,1,2,3高度
+									+ l_u8PCProtocolBuf[tempindex+1];
+									tempindex += 2;
+		    SETUPALIAS.J1_Height = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+								    tempindex += 2;
+			SETUPALIAS.J2_Height = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+									tempindex += 2;
+			SETUPALIAS.J3_Height =  (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+									tempindex += 2;
+			SETUPALIAS.LaserDistance = (l_u8PCProtocolBuf[tempindex]<<8)  //激光器水平距离
+									+ l_u8PCProtocolBuf[tempindex+1];
+									tempindex += 2;
+			SETUPALIAS.u16J0ZeroPos =(l_u8PCProtocolBuf[tempindex]<<8)	  //激光器 0 中点 起点 终点
+									+ l_u8PCProtocolBuf[tempindex+1];
+									tempindex += 2;                     
+			SETUPALIAS.u16J0StartPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);									 
+									tempindex += 2;                      
+			SETUPALIAS.u16J0EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);								 
+									tempindex += 2;	 		
+		    SETUPALIAS.u16J1ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)	  //激光器 1 中点 起点 终点
+									+ (l_u8PCProtocolBuf[tempindex+1]);									
+									tempindex += 2;                        
+			SETUPALIAS.u16J1StartPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);							
+									tempindex += 2;                      
+			SETUPALIAS.u16J1EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);								 
+									tempindex += 2;	  			  
+			SETUPALIAS.u16J2ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)	  //激光器 2 中点 起点 终点
+									+ (l_u8PCProtocolBuf[tempindex+1]);									
+									tempindex += 2;                        
+			SETUPALIAS.u16J2StartPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);								
+									tempindex += 2;                      
+			SETUPALIAS.u16J2EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);								 
+									tempindex += 2;	
+		   SETUPALIAS.u16J3ZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)	  //激光器 3 中点 起点 终点
+									+ (l_u8PCProtocolBuf[tempindex+1]);								 
+									tempindex += 2;                         
+			SETUPALIAS.u16J3StartPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);								 
+									tempindex += 2;                      
+			SETUPALIAS.u16J3EndPos = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);
+									tempindex += 2;
+			SETUPALIAS.LaneWide =  (l_u8PCProtocolBuf[tempindex]<<8)  //车道 宽度
+									+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2;
+			SETUPALIAS.MedianWide = (l_u8PCProtocolBuf[tempindex]<<8)//0激光距车道距离
+									+ (l_u8PCProtocolBuf[tempindex+1]);									
+			tempindex += 2;
+			SETUPALIAS.MedianLeftWide = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ (l_u8PCProtocolBuf[tempindex+1]);
+			tempindex += 2;
+			SETUPALIAS.u8LaneNum = l_u8PCProtocolBuf[tempindex++];// 车道数
+			SETUPALIAS.u8RoadType = l_u8PCProtocolBuf[tempindex++];// 车道类型
+
+			SETUPALIAS.u32LocalIPAddress = (l_u8PCProtocolBuf[tempindex]<<24)	//控制器IP port
 									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 									+ l_u8PCProtocolBuf[tempindex+3];
 
+			tempindex += 4;
+			SETUPALIAS.u32LocalPortNO = (l_u8PCProtocolBuf[tempindex]<<8)
+										+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2;
+			SETUPALIAS.u32SubMask = (l_u8PCProtocolBuf[tempindex]<<24)		 //子网掩码  网关 mac 
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u32GatewayIP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			for(i=0; i<6; i++)
+			{
+				SETUPALIAS.au8LocalMAC[i] = l_u8PCProtocolBuf[tempindex++];	
+			}
+			SETUPALIAS.J0_IP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3]; 
+			tempindex += 4;
+			SETUPALIAS.J0_Port = (l_u8PCProtocolBuf[tempindex]<<8)
+								+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2;
+			SETUPALIAS.J1_IP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.J1_Port =  (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];		
+			tempindex += 2;
+			SETUPALIAS.J2_IP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+
+			tempindex += 4;
+			SETUPALIAS.J2_Port = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2;	
+			SETUPALIAS.J3_IP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.J3_Port =  (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2;		
+			SETUPALIAS.u32ServerIP = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u16ServerPort = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];
+			tempindex += 2; 
+			SETUPALIAS.u32Net1_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u32Net1_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u32Net2_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;		
+			SETUPALIAS.u32Net2_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u32Net3_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;		
+			SETUPALIAS.u32Net3_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;
+			SETUPALIAS.u32Net4_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+			tempindex += 4;		
+			SETUPALIAS.u32Net4_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
+									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
+									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
+									+ l_u8PCProtocolBuf[tempindex+3];
+									tempindex += 4;
+			SETUPALIAS.u32nonormalNum = (l_u8PCProtocolBuf[tempindex]<<8)
+									+ l_u8PCProtocolBuf[tempindex+1];//异常码			 	
 			tempindex += 4;
 			SETUPALIAS.resetCnt = (l_u8PCProtocolBuf[tempindex]<<24)
 									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
 									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
 									+ l_u8PCProtocolBuf[tempindex+3];
 			tempindex += 4;
-			SETUPALIAS.u32LaserRoadAngle = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.VerticalLaser_IP = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.VerticalLaser_Port = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.ParallerLaser_IP1 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.ParallerLaser_Port1 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-			//2014-12-04
-			tempindex += 4;
-			SETUPALIAS.ParallerLaser_IP2 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.ParallerLaser_Port2 = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-			//2014-12-04
-//控制器ip参数
-			tempindex += 4;
-			SETUPALIAS.u32LocalIPAddress = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-			tempindex += 4;
-			SETUPALIAS.u32SubMask = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32LocalPortNO = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32GatewayIP = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			for(i=0; i<6; i++)
-			{
-				SETUPALIAS.au8LocalMAC[i] = l_u8PCProtocolBuf[tempindex++];
-			}
-//20130425
-//			tempindex += 6;
-			SETUPALIAS.u32Net1_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32Net2_DisconnectNum = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32Net1_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32Net2_InvalidRecNum = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-
-			tempindex += 4;
-			SETUPALIAS.u32DataProcException = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
- 			tempindex += 4;
-
-			SETUPALIAS.n32LaserHorizOff = (l_u8PCProtocolBuf[tempindex]<<24)
-									+ (l_u8PCProtocolBuf[tempindex+1]<<16)
-									+ (l_u8PCProtocolBuf[tempindex+2]<<8)
-									+ l_u8PCProtocolBuf[tempindex+3];
-		    tempindex += 4;
-				//u16VerticalZeroPos set//
-			SETUPALIAS.u16VerticalZeroPos0 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16VerticalZeroPos1 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16VerticalZeroPos2 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16VerticalZeroPos3 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-				//u16VerticalZeroPos set//
-//			SETUPALIAS.u16InclineZeroPos = (l_u8PCProtocolBuf[tempindex]<<8)
-//					+ l_u8PCProtocolBuf[tempindex+1];
-//			tempindex += 2;
-				//u16InclineZeroPos set//
-			SETUPALIAS.u16StartPtNum0 =(l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-				//u16StartPtNum set//
- 			SETUPALIAS.u16EndPtNum0 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16StartPtNum1 =(l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-				//u16StartPtNum set//
- 			SETUPALIAS.u16EndPtNum1= (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16StartPtNum2 =(l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-				//u16StartPtNum set//
- 			SETUPALIAS.u16EndPtNum2 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-			SETUPALIAS.u16StartPtNum3 =(l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-				//u16StartPtNum set//
- 			SETUPALIAS.u16EndPtNum3 = (l_u8PCProtocolBuf[tempindex]<<8)
-					+ l_u8PCProtocolBuf[tempindex+1];
-			tempindex += 2;
-
-			SETUPALIAS.u8LaserDevType = l_u8PCProtocolBuf[tempindex++];
-			SETUPALIAS.u8TrafficType = l_u8PCProtocolBuf[tempindex++];
-			SETUPALIAS.u8RoadType = l_u8PCProtocolBuf[tempindex++];	     // 道路类型 0-- 国道 1-- 高速
-			SETUPALIAS.u8LaneNum = l_u8PCProtocolBuf[tempindex++];	     //车道数
-			SETUPALIAS.u8NetType = l_u8PCProtocolBuf[tempindex++];       //网络连接：0 -- 无线 1 -- 有线
-			SETUPALIAS.u8SDEnable = l_u8PCProtocolBuf[tempindex++];
-
 			AddCrc16((uint8 *)&SETUPALIAS,sizeof(SETUPALIAS)-2);				
 
 			if(Write256_full(BUF0ADDR, (uint8 *)&SETUPALIAS, sizeof(SETUPALIAS)) && Write256_full(BUF0ADDR_BK, (uint8 *)&SETUPALIAS, sizeof(SETUPALIAS)) )
@@ -651,24 +597,22 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 			else
 			{
 				break;
-			}
- 
-
+			}		
 			OSTimeDly(1000);
 			OSSchedLock();
 			ResetSystem();
 			break;
 		case CMD_GETDEVICETIME:             //获取控制器时间 20130716
+		    GetRTCTime(&g_sstCurTime);
 			tempindex = 5;
-			l_u8PCProtocolBuf[tempindex++] = SEC;
-			l_u8PCProtocolBuf[tempindex++] = MIN;
-			l_u8PCProtocolBuf[tempindex++] = HOUR;
-			l_u8PCProtocolBuf[tempindex++] = WEEK;
-			l_u8PCProtocolBuf[tempindex++] = DAY;
-			l_u8PCProtocolBuf[tempindex++] = MONTH;
-			l_u8PCProtocolBuf[tempindex++] = YEAR % 100;
-			l_u8PCProtocolBuf[tempindex++] = YEAR / 100;
-
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Second;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Minute;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Hour;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Week;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Day;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u8Month;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u16Year % 100;
+			l_u8PCProtocolBuf[tempindex++] = g_sstCurTime.u16Year / 100;
 			l_u8PCProtocolBuf[0] = 0xFF;
 			l_u8PCProtocolBuf[1] = 0xFF;
 			l_u8PCProtocolBuf[2] = CMD_GETDEVICETIME;					
@@ -686,9 +630,7 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 			dev_time.u8Week = l_u8PCProtocolBuf[8];
 			dev_time.u8Day = l_u8PCProtocolBuf[9];
 			dev_time.u8Month = l_u8PCProtocolBuf[10];
-			dev_time.u16Year = l_u8PCProtocolBuf[11] + l_u8PCProtocolBuf[12]*100; 
-		
-		
+			dev_time.u16Year = l_u8PCProtocolBuf[11] + l_u8PCProtocolBuf[12]*100; 		
 			SetRTCTime(&dev_time);		
 			break;
 		case CMD_GETDEVICE_RDID:             //获取识别码 20130717
@@ -700,8 +642,7 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 			for(i=0; i<15; i++)
 			{
 				l_u8PCProtocolBuf[tempindex++] = RDNum[i];
-			}
-
+			}								 
 			l_u8PCProtocolBuf[0] = 0xFF;
 			l_u8PCProtocolBuf[1] = 0xFF;
 			l_u8PCProtocolBuf[2] = CMD_GETDEVICE_RDID;					
@@ -726,31 +667,24 @@ void AnalyzeComData(uint8 *pUartDataBuf, uint8 *plen)
 				RDNum[i] = l_u8PCProtocolBuf[tempindex++];
 			}
 			Write256_full(DEVICECODEADDR, RDid, 16);  //存铁电
-			Write256_full(STATIONNUMADDR, RDNum, 15);  //存铁电
-
-	
+			Write256_full(STATIONNUMADDR, RDNum, 15);  //存铁电	
 			break;
 		case CMD_GET_LANE_DIR:             //获取上下行参数
-			tempindex = 5;
-
-			l_u8PCProtocolBuf[tempindex++] = g_u8LaneDir;	
-
+			tempindex = 5;				  
+			l_u8PCProtocolBuf[tempindex++] = g_u8LaneDir;
 			l_u8PCProtocolBuf[0] = 0xFF;
 			l_u8PCProtocolBuf[1] = 0xFF;
 			l_u8PCProtocolBuf[2] = CMD_GET_LANE_DIR;					
 			l_u8PCProtocolBuf[3] = ((tempindex + 2)>>8)&0xFF;//协议帧字节数
-			l_u8PCProtocolBuf[4] = (tempindex + 2)&0xFF;
-
+			l_u8PCProtocolBuf[4] = (tempindex + 2)&0xFF; 
 			AddCrc16(l_u8PCProtocolBuf,	tempindex);
 			U5SendBytes(l_u8PCProtocolBuf, tempindex + 2);			
 			break;
-		case CMD_SET_LANE_DIR:             //设置上下行参数
-
+		case CMD_SET_LANE_DIR:             //设置上下行参数	
 			memset(l_u8PCProtocolBuf,0,sizeof(l_u8PCProtocolBuf));
 			memcpy(l_u8PCProtocolBuf, pUartDataBuf, sizeof(l_u8PCProtocolBuf));
 			tempindex = 5;
-            g_u8LaneDir = l_u8PCProtocolBuf[tempindex];
-				
+            g_u8LaneDir = l_u8PCProtocolBuf[tempindex];	   				
 			Write256_full(LANEDIRADDR, &g_u8LaneDir, 1);  //存铁电
 			l_u8PCProtocolBuf[0] = 0xFF;
 			l_u8PCProtocolBuf[1] = 0xFF;

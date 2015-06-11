@@ -74,6 +74,6 @@
 ..\OBJ\wt_task.o: ..\SRC\TASK\Task_SendUart1.h
 ..\OBJ\wt_task.o: ..\SRC\Common\FW.h
 ..\OBJ\wt_task.o: ..\SRC\Protocol\Protocol.h
-..\OBJ\wt_task.o: ..\SRC\TASK\Task_SD.h
 ..\OBJ\wt_task.o: ..\SRC\AppDriver\uart1.h
-..\OBJ\wt_task.o: ..\SRC\TASK\Task_Sv_Continue.h
+..\OBJ\wt_task.o: ..\SRC\TASK\TaskMatchSend.h
+..\OBJ\wt_task.o: ..\SRC\TASK\Task_SD.h

@@ -4340,7 +4340,8 @@ ARM Macro Assembler    Page 67
  1319 00000180                 END
 Command Line: --debug --xref --cpu=ARM926EJ-S --apcs=interwork --depend=..\OBJ\
 vicControl.d -o..\OBJ\vicControl.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\Philips 
---list=.\vicControl.lst ..\SRC\SYSTEM\vicControl.s
+--predefine="__FLASHMODE SETA 1" --list=.\vicControl.lst ..\SRC\SYSTEM\vicContr
+ol.s
 
 
 
@@ -12733,4 +12734,4 @@ Symbol: OsEnterSum
       At line 344 in file ..\SRC\SYSTEM\vicControl.s
 
 7 symbols
-1175 symbols in table
+1176 symbols in table

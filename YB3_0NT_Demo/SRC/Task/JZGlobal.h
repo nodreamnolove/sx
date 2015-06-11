@@ -51,7 +51,8 @@ JZG_EXT	OS_EVENT *g_JG2flag;
 JZG_EXT	OS_EVENT *g_JG3flag;
 JZG_EXT	OS_EVENT *g_JG_Pro;
 JZG_EXT	OS_EVENT  *g_Uart1_send;
-
+extern  OS_EVENT *FW_flag;
+JZG_EXT OS_EVENT *g_sendVeh;
 //Uart1出车中用于保存一帧数据的车
 
 //Uart1出车中用于统计未被保存的出车数，当出车数满足24时，将会一起写进SD卡中
@@ -107,7 +108,8 @@ JZG_EXT	int32 	 ThresVehParallelWide;  // %并车宽度上线：3.5m
 JZG_EXT	int32 	 ThresVehSingleWide;//%    并车情况下单车宽度阈值，2.2m	//修改为2000，hong.7.11
 JZG_EXT	int32 	 ThresOrigineDataHigh ;  //%激光器扫描距离上线：20m
 JZG_EXT	int32	 ThresOrigineDataLow;      //%激光器扫描距离下线：0.03m
-
+JZG_EXT	int32 	 ThresOrigineDataHigh0 ;  //%激光器扫描距离上线：20m
+JZG_EXT	int32	 ThresOrigineDataLow0;      //%激光器扫描距离下线：0.03m
 
 JZG_EXT	int32	 g_UART1Cnt;      //%激光器扫描距离下线：0.03m
 #if  SHOWVEHPASSDEBUG > 0	//显示过车调试代码	

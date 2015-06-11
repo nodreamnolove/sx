@@ -24,7 +24,7 @@
 #ifndef	__DEFCONFIG_H
 #define	__DEFCONFIG_H
 
-#define		JGJD_VERSION		"S1-20140828"	   //程序版本号
+#define		JGJD_VERSION		"S1-20150313"	   //程序版本号
 
 //#define		PROGRAMVERSION		"BC B1.2.3.1"
 

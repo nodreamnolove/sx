@@ -71,7 +71,7 @@ void  Task_Checknet(void *tdata)
 //	memcpy(&g_sniLocal, &Test, 38);
 //	InitializeW5100(&g_sniLocal);	
 //	//===测试用结束===
-//	memcpy(&g_sniLocal, (uint8 *)&SETUPALIAS.VerticalLaser_IP, 38);
+//	memcpy(&g_sniLocal, (uint8 *)&SETUPALIAS.J0_IP, 38);
 //	
 //	InitializeW5100(&g_sniLocal);//
 
@@ -122,11 +122,11 @@ void  Task_Checknet(void *tdata)
 				Flag_NetConnect=1;
 			}
 #else
-			if((S0_State & S_CONN))
+			if((S0_State & S_CONN)==S_CONN)
 			{
 				Flag_NetConnect=1;			//认定网络连接正常	 						
 			}  
-			if((S2_State & S_CONN))
+			if((S2_State & S_CONN)==S_CONN)
 			{
 				Flag_NetConnect=1;			//认定网络连接正常	 						
 			} 
@@ -138,8 +138,8 @@ void  Task_Checknet(void *tdata)
 				P3_OUTP_CLR = (1 << 9);	 //亮
 				l_u32Linknum=0;
 #ifndef SIM_SOFTWARE
-
-				if(((S0_State & S_CONN) == S_CONN) || ((S1_State & S_CONN) == S_CONN)||((S2_State & S_CONN) == S_CONN)||((S3_State & S_CONN) == S_CONN)) 
+			//	if(((S2_State & S_CONN) == S_CONN)&&((S3_State & S_CONN) == S_CONN)) 
+				if(((S0_State & S_CONN) == S_CONN) && ((S1_State & S_CONN) == S_CONN)&&((S2_State & S_CONN) == S_CONN)&&((S3_State & S_CONN) == S_CONN)) 
 				{
 					Flag_NetConnect	 = 1;
 				}
@@ -177,23 +177,27 @@ void  Task_Checknet(void *tdata)
 					} 	
 				}
 
-#else
- 				if(((S0_State & S_CONN) == S_CONN)||(S2_State & S_CONN == S_CONN)) 
+#else			
+
+
+		//    	if((S2_State & S_CONN == S_CONN)) 
+ 				if(((S0_State & S_CONN) == S_CONN)&&(S2_State & S_CONN == S_CONN))
 				{
 					Flag_NetConnect	 = 1;  //
 				}
 				else
 				{
 					Flag_NetConnect = 0;
+					if(((S0_State & S_CONN) != S_CONN))	 
 					{
-						SETUPALIAS.u32Net1_DisconnectNum++;
+				//		SETUPALIAS.u32Net3_DisconnectNum++;
 						S0_State = 0;
 						SetSocket();
 						OSTimeDly(30);				
 					}
 					if(((S2_State & S_CONN) != S_CONN))	 
 					{
-						SETUPALIAS.u32Net3_DisconnectNum++;
+				//		SETUPALIAS.u32Net3_DisconnectNum++;
 						S2_State = 0;
 						SetSocket();
 						OSTimeDly(30);				

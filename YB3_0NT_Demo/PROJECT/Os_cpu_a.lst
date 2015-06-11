@@ -400,8 +400,8 @@ ARM Macro Assembler    Page 7
   280 00000080         
   281 00000080                 END
 Command Line: --debug --xref --cpu=ARM926EJ-S --apcs=interwork --depend=..\OBJ\
-Os_cpu_a.d -o..\OBJ\Os_cpu_a.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\Philips --li
-st=.\Os_cpu_a.lst ..\SRC\OS\Os_cpu_a.s
+Os_cpu_a.d -o..\OBJ\Os_cpu_a.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\Philips --pr
+edefine="__FLASHMODE SETA 1" --list=.\Os_cpu_a.lst ..\SRC\OS\Os_cpu_a.s
 
 
 
@@ -818,4 +818,4 @@ Symbol: _UsrFunctionAddr
       At line 171 in file ..\SRC\OS\Os_cpu_a.s
 Comment: _UsrFunctionAddr used once
 12 symbols
-368 symbols in table
+369 symbols in table

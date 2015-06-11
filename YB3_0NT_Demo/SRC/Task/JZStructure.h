@@ -28,9 +28,16 @@
 
 
 #if	YBVERSION >= 30		//3.0仪表功能
-
+#pragma pack(1)
 typedef	struct tagNetInfo
 {
+	uint8	au8IPAddr[4];					//IP
+	uint32	u32LocalPortNO;	
+	uint8	au8SubMask[4];					//子网掩码
+	uint8	au8GatewayIP[4];				//默认网关	
+
+//32		
+	uint8	au8MACAddr[6];					//MAC
 	uint8	au8ServerIP1[4];				//服务器1(垂直激光)IP地址 
 	uint32	u32ServerPortNO1;				//服务器1端口号
 	uint8	au8ServerIP2[4];				//服务器2IP地址
@@ -39,18 +46,13 @@ typedef	struct tagNetInfo
 	uint32	u32ServerPortNO3;				//服务器3端口号	
 	uint8	au8ServerIP4[4];				//服务器3IP地址
 	uint32	u32ServerPortNO4;				//服务器3端口号	
-	uint8	au8IPAddr[4];					//IP	
-	uint8	au8SubMask[4];					//子网掩码
-	uint8	au8GatewayIP[4];				//默认网关	
-	uint32	u32LocalPortNO;
-//32		
-	uint8	au8MACAddr[6];					//MAC
+
 	uint8	au8CRC[2];						//CRC
 	
 } NetInfo;	 
-
+#pragma pack() 
 #endif	//#if	YBVERSION >= 30		//3.0仪表功能
-
+	
 typedef	struct tagSystemTime
 {
 	uint16	u16Year;				//年
@@ -61,84 +63,105 @@ typedef	struct tagSystemTime
 	uint8	u8Minute;				//分
 	uint8	u8Second;				//秒
 } SystemTime;
-
+#pragma pack(1)
 typedef struct tagSetupParam				     //2013-04-15 徐威修改结构体上的参数
 {
-	uint8 	u8BaudRate;			  				//串口0波特率 
-	uint8 	u8DOG;			 					//看门狗设置
-	uint8  	u8Year;							 	//程序修改日期--年
-	uint8  	u8Month;							//程序修改日期--月
-	uint8  	u8Day;								//程序修改日期--日 
-	uint8	au8ReserveByte1[3];					//20130418
-//8
-	int32	 HeightLaser0;                           //激光器0高度值	 
-	int32	 HeightLaser1;                           //激光器1高度值	 
-	int32	 HeightLaser2;                           //激光器2高度值	 
-	int32	 HeightLaser3;                           //激光器3高度值	   	  
-//	int32	 IncHeightLaser;                        //激光器倾斜高度值	
-	int32    LaserDistance;	                        //激光器之间距离
-//	int32    Angle12;						    	//倾斜激光器的角度
-	int32    LaneWide;                              //%车道宽度
-    int32    MedianWide;                       //隔离带右边宽度
-    int32    MedianLeftWide;         	            //隔离带左边宽度
-	int32	 VdirAngle;								//垂直偏角:点数
-    int32	 IdirAngle;								//倾斜偏角:点数
-	uint32   resetCnt;								//记录重启次数
-	uint32	 u32LaserRoadAngle;						//激光扫描截面偏角
-	uint32	 VerticalLaser_IP;						//垂直激光IP	20130418  VerticalLaser_IP
-	uint32	 VerticalLaser_Port;					//
-	uint32	 ParallerLaser_IP1;						// 平行方向激光器1
-	uint32	 ParallerLaser_Port1;						//
-	uint32	 ParallerLaser_IP2;						//InclineLaser_IP 平行方向激光器2
-	uint32	 ParallerLaser_Port2;						//
-	uint32	 ParallerLaser_IP3;						//InclineLaser_IP 平行方向激光器2
-	uint32	 ParallerLaser_Port3;						//
-	uint32	 u32LocalIPAddress;						//
-	uint32	 u32SubMask;							    //
-	uint32	 u32GatewayIP;								//
-	uint32	 u32LocalPortNO;							//
-	uint8	 au8LocalMAC[6];							//
-	uint8	 au8ReserveByte2[2];
-//92	 
-	uint32	 u32Net1_DisconnectNum;
-	uint32	 u32Net2_DisconnectNum;
-	uint32	 u32Net3_DisconnectNum;
-	uint32	 u32Net4_DisconnectNum;
-	uint32	 u32Net1_InvalidRecNum;
-	uint32	 u32Net2_InvalidRecNum;
-	uint32	 u32Net3_InvalidRecNum;
-	uint32	 u32Net4_InvalidRecNum;
-	uint32	 u32DataProcException;
-//112
-	uint8    au8ProgramVersion[11];					//程序版本号 20130922
-	int32	 n32LaserHorizOff;					    //激光水平位置偏移(X方向)
-	uint16   u16VerticalZeroPos0;                       //垂直激光器的0点位置
-	uint16   u16VerticalZeroPos1;                       //垂直激光器的1点位置
-	uint16   u16VerticalZeroPos2;                       //垂直激光器的2点位置
-	uint16   u16VerticalZeroPos3;                       //垂直激光器的3点位置
-//	uint16   u16InclineZeroPos;                       //倾斜激光器的0点位置
-	uint16   u16StartPtNum0;                         //起始点数1
-	uint16   u16EndPtNum0;                           //终止点数1
-	uint16   u16StartPtNum1;                         //起始点数2
-	uint16   u16EndPtNum1;                           //终止点数2
-	uint16   u16StartPtNum2;                         //起始点数 3
-	uint16   u16EndPtNum2;                           //终止点数3
-	uint16   u16StartPtNum3;                         //起始点数4
-	uint16   u16EndPtNum3;                           //终止点数4
-	uint8	 u8LaserDevType;						//激光设置类型(0:sick,1:wj)
+//版本
+  	uint8    au8ProgramVersion[11];					//程序版本号 20130922
+//安装方式 
+   	uint8    u8InstallFlag;                         //安装方式，0侧装，1正装
+//设备ID
+	uint32   u32DevID;   
+//波特率
+	uint8 	u8BaudRate;			  				//串口0波特率
+//看门狗
+	uint8 	u8DOG;			 				
+//设备分类
 	uint8	 u8TrafficType;							//交调类型
-	uint8    u8RoadType;                            //道路类型 0 国道 1 高速
-	uint8    u8LaneNum;                             //车道数 0-- 4车道 1-- 6车道
+//数据上传类型
 	uint8    u8NetType;							 //网络类型 ，0无线传输，1有线传输	（功能没有）
-	uint8    u8InstallFlag;                         //安装方式，0侧装，1正装
+//重启次数
+	uint32   resetCnt;								//记录重启次数 
+//设备厂家
+	uint8	 u8LaserDevType;						//激光设置类型(0:sick,1:wj)
+//sd卡使能
 	uint8    u8SDEnable;                  //SD卡采集数据使能 ，0表示不使能，1表示使能，默认是0	（功能没有）
-
-//130
-	uint8 	au8ReserveByte3[4];				//预留字节	
-	uint16	u16CRC;								//CRC校验码	
-	
+//激光0、1、2、3高度 
+	int32	 J0_Height;                           //激光器0高度值	 
+	int32	 J1_Height;                           //激光器1高度值	 
+	int32	 J2_Height;                           //激光器2高度值	 
+	int32	 J3_Height;                           //激光器3高度值
+//水平激光间距
+	int32    LaserDistance;	                        //激光器之间距离      非常重要
+//激光0中起始点
+	uint16   u16J0ZeroPos;                       
+	uint16   u16J0StartPos;                         //起始点数0
+	uint16   u16J0EndPos;                           //终止点数0
+//激光1中起始点
+	uint16   u16J1ZeroPos;                      
+	uint16   u16J1StartPos;                         //起始点数2
+	uint16   u16J1EndPos;                           //终止点数2
+//激光2中起始点
+	uint16   u16J2ZeroPos;                      
+	uint16   u16J2StartPos;                         //起始点数 3
+	uint16   u16J2EndPos;                           //终止点数3
+//激光3中起始点
+	uint16   u16J3ZeroPos;  
+	uint16   u16J3StartPos;                         //起始点数4
+	uint16   u16J3EndPos;                           //终止点数4
+//车道宽度
+ 	int32    LaneWide;                              //%车道宽度
+//激光0距车道边距
+ 	int32    MedianWide;                       		//车道左边坐标	 激光0距车道距离
+//激光1距车道边距
+	int32    MedianLeftWide;         	            //车道右边坐标	激光1距车道距离
+//车道数  	
+	uint8    u8LaneNum;                             //车道数 0-- 4车道 1-- 6车道
+//车道类型
+	uint8    u8RoadType;                            //道路类型 0 国道 1 高速
+//控制器IP	  port
+	uint32	 u32LocalIPAddress;						
+	uint32	 u32LocalPortNO;						
+//控制器子网掩码
+	uint32	 u32SubMask;
+//控制器网关
+	uint32	 u32GatewayIP;		
+//控制器mac
+	uint8	 au8LocalMAC[6];
+//激光0 ip  port
+	uint32	 J0_IP;						//垂直激光IP	20130418  VerticalLaser_IP
+	uint32	 J0_Port;					//
+//激光1 ip  port
+	uint32	 J1_IP;						// 平行方向激光器1
+	uint32	 J1_Port;						//
+//激光2 ip	port
+	uint32	 J2_IP;						//InclineLaser_IP 平行方向激光器2
+	uint32	 J2_Port;						//
+//激光3 ip  port
+	uint32	 J3_IP;						//InclineLaser_IP 平行方向激光器2
+	uint32	 J3_Port;		
+//服务器 ip port
+	uint32  u32ServerIP;					//服务器IP
+	uint16  u16ServerPort;					//服务器port	
+//网络0 断开 无效
+	uint32	 u32Net1_DisconnectNum;
+	uint32	 u32Net1_InvalidRecNum;	
+//网络1 断开 无效
+	uint32	 u32Net2_DisconnectNum;
+	uint32	 u32Net2_InvalidRecNum;
+//网络2 断开 无效
+	uint32	 u32Net3_DisconnectNum;
+	uint32	 u32Net3_InvalidRecNum;
+//网络3 断开 无效
+	uint32	 u32Net4_DisconnectNum;
+	uint32	 u32Net4_InvalidRecNum;
+//异常码
+	uint32    u32nonormalNum;
+//预留 
+	uint8 	au8ReserveByte[4];				//预留字节
+	uint16	u16CRC;								//CRC校验码		
 } SetupParam;
-
+#pragma pack()
 #define POINTSET_MASK	0x0F
 #define POINTSET_CNT	0x10
 
@@ -164,7 +187,7 @@ typedef struct tagPtIncSet
 
 #define FRAME_MASK	   0xFF
 #define FRAME_MAXCNT   0x100 //256
-#define FRAME_BUFLEN   0x80 //128
+#define FRAME_BUFLEN   0xff //128
 
 #define NO_USED			0x00  //无效
 #define OCCURING_USED	0x01  //正在进行时
@@ -250,8 +273,8 @@ typedef struct __tagVehSendInfo
 	uint32 u32Veh_Index;		//数据序号 占3个字节
 }_VehSendInfo;
 
-#define NORMAL_MAX_EMPTYFRAME	0x05  //正常空白帧上限
-#define ERR_MAX_EMPTYFRAME		0x32  //非正常空白帧上限
+#define NORMAL_MAX_EMPTYFRAME	0x0A  //正常空白帧上限
+#define ERR_MAX_EMPTYFRAME		0x14  //非正常空白帧上限
 #define ERR_MAXVER_EMPTYFRAME      0x0A  //非正常（倾斜激光器进车）垂直出车空白帧上限
 typedef struct tagVehicleStruct
 {

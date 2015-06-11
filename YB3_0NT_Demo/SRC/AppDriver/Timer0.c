@@ -56,27 +56,35 @@ void IRQ_Timer0(void)
 	t0_count1++;
 	t0_count2++;    
 #ifndef 	 SIM_SOFTWARE	  
-	if(t0_count1==1)
-	 {		 				
-		if(Flag_NetConnect==1)
+	 if(Flag_NetConnect==1)
+	 {		
+	 
+	 	if(t0_count1==1)			
 		{
 			//g_au32Tempa[g_au32count][1] = t0_count2;
 		   //g_au32count=(g_au32count+1)%500;
 			S0_Data&=~S_TRANSMITOK;	
 			S_tx_process(0,RdToLMSSendData, 24);
-
+		 }
+		 else if(t0_count1==3)
+		 {
 			S1_Data&=~S_TRANSMITOK;	
 	        S_tx_process(1,RdToLMSSendData, 24); 
-			
+		 }
+		 else if(t0_count1==5)
+		 {	
 			S2_Data&=~S_TRANSMITOK;	
 	        S_tx_process(2,RdToLMSSendData, 24);  
-			
+		 }
+		 else if(t0_count1==7)
+		 {	
 			S3_Data&=~S_TRANSMITOK;	
 	        S_tx_process(3,RdToLMSSendData, 24);									
 		 }
-	}  
-	if(	t0_count1>9)
+		 else if(t0_count1>9)
 			t0_count1=0;
+	}  
+	
 #else	 //·ÂÕæ
 	if(Flag_NetConnect==1)
 	{
@@ -85,8 +93,13 @@ void IRQ_Timer0(void)
 			S0_Data&=~S_TRANSMITOK;
 			S_tx_process(0,RdToLMSSendData, 24);
 
-//			S2_Data&=~S_TRANSMITOK;
-//			S_tx_process(2,RdToLMSSendData, 24);
+		
+		}
+		else
+		if(t0_count1 == 3)
+		{
+			S2_Data&=~S_TRANSMITOK;
+			S_tx_process(2,RdToLMSSendData, 24);
 		}
 		else if(t0_count1 > 9)
 		{  		  

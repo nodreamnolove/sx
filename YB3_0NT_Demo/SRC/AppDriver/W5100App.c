@@ -96,8 +96,8 @@ void InitNetSetting(void)
 	S0_DIP[1] = 168;
 	S0_DIP[2] = 0;
 	S0_DIP[3] = 20;
-	S0_DPort[0] = (8080 >> 8) & 0xFF;	 	//目的端口号
-	S0_DPort[1] = (8080) & 0xFF;	
+	S0_DPort[0] = (8081 >> 8) & 0xFF;	 	//目的端口号
+	S0_DPort[1] = (8081) & 0xFF;	
 #endif
 	S0_Mode = TCP_CLIENT;							//设置端口0默认的工作方式为UDP
 

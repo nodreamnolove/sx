@@ -68,12 +68,12 @@ WT_EXT 	OS_STK  TaskJG1[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskJG2[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskJG3[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskDataJG[TASKSTACKSIZE];
-WT_EXT 	OS_STK  TaskSD[TASKSTACKSIZE];
+//WT_EXT 	OS_STK  TaskSD[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskUart5Senddata[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskTest[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskSendUart1[TASKSTACKSIZE];
 WT_EXT 	OS_STK  TaskNetSend[TASKSTACKSIZE];
-WT_EXT 	OS_STK  TaskSvContinue[TASKSTACKSIZE];
+WT_EXT 	OS_STK  TaskMatchSend[TASKSTACKSIZE];
 
 extern	void	Task_TiPo(void *pdata);
 WT_EXT	void	TaskStart(void *pdata); 
@@ -86,10 +86,10 @@ WT_EXT	void 	Task_Data_JG(void *tdata);
 WT_EXT	void	Task_Uart5(void *tdata);
 WT_EXT 	void 	Task_Uart5_Senddata(void *tdata);
 WT_EXT 	void 	Task_Uart1_Senddata(void *tdata);
-WT_EXT 	void 	Task_SD(void *tdata);
+//WT_EXT 	void 	Task_SD(void *tdata);
 WT_EXT 	void 	Task_SendUart1(void *tdata);
 WT_EXT 	void 	Task_Net_Send(void *tdata);
-WT_EXT	void 	Task_Sv_Continue(void *tdata);
+WT_EXT	void 	Task_Match_Send(void *tdata);
 
 WT_EXT	void 	Task_Test(void *tdata);
 
@@ -117,5 +117,6 @@ extern uint8 g_au8JG_4_Buff[4][832];  //激光数据缓存 4个；
 extern uint8 g_u8Jg_4_Buff_Count;
 extern uint8 g_au8Two_Buff[5000][1662];
 extern uint32 g_u32Two_Buff_cout;
-
+extern uint8 Read256_full(uint16 p_u16Addr, uint8 * p_pu8WriteBuf, uint16 p_u16Len);
+extern uint8 Write256_full(uint16 p_u16Addr, uint8 * p_pu8WriteBuf, uint16 p_u16Len);
 #endif	//__WT_TASK_H

@@ -23,7 +23,7 @@
 #define		Task_Uart5PRIO		3//hong 调整
 #define 	Task_Uart5_SenddataPRIO 10
 #define 	Task_SDPRIO 		9//
-#define		TaskSvContinuePRIO  12
+#define		TaskMatchSendPRIO  12
 #define     TaskSendUart1PRIO	11
 #define		TASKChecknetPRIO	14
 #define		TASK_TiPoPRIO		2           //时钟任务 由13改为2 防止统计丢包 20131216

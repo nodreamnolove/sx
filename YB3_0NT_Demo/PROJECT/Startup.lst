@@ -2774,23 +2774,23 @@ ARM Macro Assembler    Page 43
   130 0000005C         ;Build the SVC stack
   131 0000005C         ;…Ë÷√π‹¿Ìƒ£ Ω∂—’ª
   132 0000005C E321F0D3        MSR              CPSR_c, #0xd3
-  133 00000060 E59FD0AC        LDR              SP, StackSvc
+  133 00000060 E59FD0B0        LDR              SP, StackSvc
   134 00000064         ;Build the IRQ stack
   135 00000064         ;…Ë÷√÷–∂œƒ£ Ω∂—’ª
   136 00000064 E321F0D2        MSR              CPSR_c, #0xd2
-  137 00000068 E59FD0A8        LDR              SP, StackIrq
+  137 00000068 E59FD0AC        LDR              SP, StackIrq
   138 0000006C         ;Build the FIQ stack 
   139 0000006C         ;…Ë÷√øÏÀŸ÷–∂œƒ£ Ω∂—’ª
   140 0000006C E321F0D1        MSR              CPSR_c, #0xd1
-  141 00000070 E59FD0A4        LDR              SP, StackFiq
+  141 00000070 E59FD0A8        LDR              SP, StackFiq
   142 00000074         ;Build the DATAABORT stack
   143 00000074         ;…Ë÷√÷–÷πƒ£ Ω∂—’ª
   144 00000074 E321F0D7        MSR              CPSR_c, #0xd7
-  145 00000078 E59FD0A0        LDR              SP, StackAbt
+  145 00000078 E59FD0A4        LDR              SP, StackAbt
   146 0000007C         ;Build the UDF stack
   147 0000007C         ;…Ë÷√Œ¥∂®“Âƒ£ Ω∂—’ª
   148 0000007C E321F0DB        MSR              CPSR_c, #0xdb
-  149 00000080 E59FD09C        LDR              SP, StackUnd
+  149 00000080 E59FD0A0        LDR              SP, StackUnd
   150 00000084         ;Build the SYS stack
   151 00000084         ;…Ë÷√œµÕ≥ƒ£ Ω∂—’ª
 
@@ -2800,7 +2800,7 @@ ARM Macro Assembler    Page 44
 
 
   152 00000084 E321F0D0        MSR              CPSR_c, #0xd0
-  153 00000088 E59FD070        LDR              SP, =StackUsr
+  153 00000088 E59FD074        LDR              SP, =StackUsr
   154 0000008C E12FFF10        BX               R0
   155 00000090         
   156 00000090         ;/******************************************************
@@ -2826,159 +2826,161 @@ ARM Macro Assembler    Page 44
   172 00000090                 IF               :DEF: __FLASHMODE ;/* »Áπ˚‘⁄SDR
                                                             am÷–‘À––£¨≤ª–Ë“™≤Ÿ◊
                                                             ˜ª∫¥Ê   */
-  174                          ENDIF
-  175 00000090         
-  176 00000090         ; /*
-  177 00000090         ;  * πÿ±’ƒ⁄≤øø¥√≈π∑ ±÷”
-  178 00000090         ;  */
-  179 00000090 E59F006C        LDR              R0, =TIMCLK_CTRL
-  180 00000094 E3A01000        MOV              R1, #0
-  181 00000098 E5801000        STR              R1, [R0]
-  182 0000009C         
-  183 0000009C         ; Enable VFP
-  184 0000009C                 IF               :DEF: __VFPENABLE
+  173 00000090 EA000010        B                _SDRam      ;/* Ã¯◊™÷¡_SDRam   
+                                                            */
+  174 00000094                 ENDIF
+  175 00000094         
+  176 00000094         ; /*
+  177 00000094         ;  * πÿ±’ƒ⁄≤øø¥√≈π∑ ±÷”
+  178 00000094         ;  */
+  179 00000094 E59F006C        LDR              R0, =TIMCLK_CTRL
+  180 00000098 E3A01000        MOV              R1, #0
+  181 0000009C E5801000        STR              R1, [R0]
+  182 000000A0         
+  183 000000A0         ; Enable VFP
+  184 000000A0                 IF               :DEF: __VFPENABLE
   189                          ENDIF
-  190 0000009C         
-  191 0000009C         ; /*
-  192 0000009C         ;  * πÿ±’MMU°¢Cache∫Õ–¥ª∫≥Â
-  193 0000009C         ;  */
-  194 0000009C EE110F10        MRC              p15, 0, r0, c1, c0, 0
-  195 000000A0 E3C00001        BIC              r0 ,r0 ,#1  ;/*  «Â¡„MŒª£¨Ω˚÷πM
+  190 000000A0         
+  191 000000A0         ; /*
+  192 000000A0         ;  * πÿ±’MMU°¢Cache∫Õ–¥ª∫≥Â
+  193 000000A0         ;  */
+  194 000000A0 EE110F10        MRC              p15, 0, r0, c1, c0, 0
+  195 000000A4 E3C00001        BIC              r0 ,r0 ,#1  ;/*  «Â¡„MŒª£¨Ω˚÷πM
                                                             MU           */
-  196 000000A4 E3C00004        BIC              r0 ,r0 ,#4  ;/*  «Â¡„D cache£¨Ω
+  196 000000A8 E3C00004        BIC              r0 ,r0 ,#4  ;/*  «Â¡„D cache£¨Ω
                                                             ˚÷π ˝æ›Cache */
-  197 000000A8 E3C00A01        BIC              r0 ,r0 ,#0x1000 ;/*  «Â¡„I CACH
+  197 000000AC E3C00A01        BIC              r0 ,r0 ,#0x1000 ;/*  «Â¡„I CACH
                                                             E£¨Ω˚÷π÷∏¡ÓCache */
                                                               
-  198 000000AC EE010F10        MCR              p15, 0, r0, c1, c0 ,0
-  199 000000B0         
-  200 000000B0 E3A00000        MOV              r0, #0
-  201 000000B4 EE070F17        MCR              p15, 0, r0, c7, c7, 0 ;/*  cach
+  198 000000B0 EE010F10        MCR              p15, 0, r0, c1, c0 ,0
+  199 000000B4         
+  200 000000B4 E3A00000        MOV              r0, #0
+  201 000000B8 EE070F17        MCR              p15, 0, r0, c7, c7, 0 ;/*  cach
                                                             eŒﬁ–ß              
                                                                 */
-  202 000000B8         
-  203 000000B8         ; Invalidate I cache
 
 
 
 ARM Macro Assembler    Page 45 
 
 
-  204 000000B8 E3A00000        mov              r0, #0
-  205 000000BC EE070F15        mcr              p15, 0, r0, c7, c5, 0
-  206 000000C0         
-  207 000000C0         ; Enable I and D caches and write buffer
-  208 000000C0 EE110F10        mrc              p15, 0, r0, c1, c0, 0
-  209 000000C4 E3800A01        orr              r0, r0, #(1 :SHL: 12) ; I-cache
+  202 000000BC         
+  203 000000BC         ; Invalidate I cache
+  204 000000BC E3A00000        mov              r0, #0
+  205 000000C0 EE070F15        mcr              p15, 0, r0, c7, c5, 0
+  206 000000C4         
+  207 000000C4         ; Enable I and D caches and write buffer
+  208 000000C4 EE110F10        mrc              p15, 0, r0, c1, c0, 0
+  209 000000C8 E3800A01        orr              r0, r0, #(1 :SHL: 12) ; I-cache
                                                             
-  210 000000C8 E3800004        orr              r0, r0, #(1 :SHL: 2) ; D-cache
-  211 000000CC E3800008        orr              r0, r0, #(1 :SHL: 3) 
+  210 000000CC E3800004        orr              r0, r0, #(1 :SHL: 2) ; D-cache
+  211 000000D0 E3800008        orr              r0, r0, #(1 :SHL: 3) 
                                                             ; write buffer
-  212 000000D0 EE010F10        mcr              p15, 0, r0, c1, c0, 0
-  213 000000D4         
-  214 000000D4         _SDRam
-  215 000000D4 EBFFFFFE        BL               InitStack   ;/*  ≥ı ºªØ∂—’ª    
+  212 000000D4 EE010F10        mcr              p15, 0, r0, c1, c0, 0
+  213 000000D8         
+  214 000000D8         _SDRam
+  215 000000D8 EBFFFFFE        BL               InitStack   ;/*  ≥ı ºªØ∂—’ª    
                                                                          */
-  216 000000D8 EBFFFFFE        BL               TargetResetInit ;/*  ƒø±Í∞Âª˘±æ
+  216 000000DC EBFFFFFE        BL               TargetResetInit ;/*  ƒø±Í∞Âª˘±æ
                                                             ≥ı ºªØ           */
                                                                    
-  217 000000DC         
-  218 000000DC EAFFFFFE        B                __main      ;/*  Ã¯◊™µΩc”Ô—‘»Îø
+  217 000000E0         
+  218 000000E0 EAFFFFFE        B                __main      ;/*  Ã¯◊™µΩc”Ô—‘»Îø
                                                             ⁄            */
-  219 000000E0         
-  220 000000E0         ;/******************************************************
+  219 000000E4         
+  220 000000E4         ;/******************************************************
                        **************************************************
-  221 000000E0         ;** Function name:          __user_initial_stackheap
-  222 000000E0         ;**
-  223 000000E0         ;** Descriptions:           ø‚∫Ø ˝≥ı ºªØ∂—∫Õ’ª£¨≤ªƒ‹…æ≥˝
+  221 000000E4         ;** Function name:          __user_initial_stackheap
+  222 000000E4         ;**
+  223 000000E4         ;** Descriptions:           ø‚∫Ø ˝≥ı ºªØ∂—∫Õ’ª£¨≤ªƒ‹…æ≥˝
                        
-  224 000000E0         ;**
-  225 000000E0         ;** input parameters:       ≤Œøºø‚∫Ø ˝ ÷≤·
-  226 000000E0         ;** Returned value:         ≤Œøºø‚∫Ø ˝ ÷≤·
-  227 000000E0         ;**
-  228 000000E0         ;** Created by:             Chenmingji
-  229 000000E0         ;** Created Date:           2004/02/02
-  230 000000E0         ;**-----------------------------------------------------
+  224 000000E4         ;**
+  225 000000E4         ;** input parameters:       ≤Œøºø‚∫Ø ˝ ÷≤·
+  226 000000E4         ;** Returned value:         ≤Œøºø‚∫Ø ˝ ÷≤·
+  227 000000E4         ;**
+  228 000000E4         ;** Created by:             Chenmingji
+  229 000000E4         ;** Created Date:           2004/02/02
+  230 000000E4         ;**-----------------------------------------------------
                        --------------------------------------------------
-  231 000000E0         ;** Modified by:            
-  232 000000E0         ;** Modified date:          
-  233 000000E0         ;**-----------------------------------------------------
+  231 000000E4         ;** Modified by:            
+  232 000000E4         ;** Modified date:          
+  233 000000E4         ;**-----------------------------------------------------
                        --------------------------------------------------
-  234 000000E0         ;*******************************************************
+  234 000000E4         ;*******************************************************
                        *************************************************/
-  235 000000E0         __user_initial_stackheap
-  236 000000E0 E59F0020        LDR              R0, =bottom_of_heap
-  237 000000E4         ;LDR   R1, =StackUsr   
-  238 000000E4 E59F2020        LDR              R2, =top_of_heap
-  239 000000E8 E59F3020        LDR              R3, =bottom_of_Stacks
-  240 000000EC E12FFF1E        BX               LR
-  241 000000F0         
-  242 000000F0                 EXPORT           _sys_exit
-  243 000000F0         _sys_exit
-  244 000000F0 EAFFFFFE        B                .
-  245 000000F4         
-  246 000000F4                 EXPORT           __rt_div0
-  247 000000F4                 EXPORT           fputc
-  248 000000F4                 EXPORT           fgetc
-  249 000000F4                 EXPORT           _sys_close
-  250 000000F4                 EXPORT           _sys_write
-  251 000000F4                 EXPORT           _sys_read
+  235 000000E4         __user_initial_stackheap
+  236 000000E4 E59F0020        LDR              R0, =bottom_of_heap
+  237 000000E8         ;LDR   R1, =StackUsr   
+  238 000000E8 E59F2020        LDR              R2, =top_of_heap
+  239 000000EC E59F3020        LDR              R3, =bottom_of_Stacks
+  240 000000F0 E12FFF1E        BX               LR
+  241 000000F4         
+  242 000000F4                 EXPORT           _sys_exit
+  243 000000F4         _sys_exit
+  244 000000F4 EAFFFFFE        B                .
+  245 000000F8         
+  246 000000F8                 EXPORT           __rt_div0
+  247 000000F8                 EXPORT           fputc
+  248 000000F8                 EXPORT           fgetc
+  249 000000F8                 EXPORT           _sys_close
 
 
 
 ARM Macro Assembler    Page 46 
 
 
-  252 000000F4                 EXPORT           _sys_istty
-  253 000000F4                 EXPORT           _sys_seek
-  254 000000F4                 EXPORT           _sys_ensure
-  255 000000F4                 EXPORT           _sys_flen
-  256 000000F4                 EXPORT           _sys_tmpnam
-  257 000000F4                 EXPORT           _sys_command_string
-  258 000000F4         
-  259 000000F4         __rt_div0
-  260 000000F4         fputc
-  261 000000F4         fgetc
-  262 000000F4         _sys_close
-  263 000000F4         _sys_write
-  264 000000F4         _sys_read
-  265 000000F4         _sys_istty
-  266 000000F4         _sys_seek
-  267 000000F4         _sys_ensure
-  268 000000F4         _sys_flen
-  269 000000F4         _sys_tmpnam
-  270 000000F4         _sys_command_string
-  271 000000F4 E1A00000        NOP
-  272 000000F8 E3A00000        MOV              R0, #0
-  273 000000FC E12FFF1E        BX               LR
-  274 00000100         
-  275 00000100 00000000 
+  250 000000F8                 EXPORT           _sys_write
+  251 000000F8                 EXPORT           _sys_read
+  252 000000F8                 EXPORT           _sys_istty
+  253 000000F8                 EXPORT           _sys_seek
+  254 000000F8                 EXPORT           _sys_ensure
+  255 000000F8                 EXPORT           _sys_flen
+  256 000000F8                 EXPORT           _sys_tmpnam
+  257 000000F8                 EXPORT           _sys_command_string
+  258 000000F8         
+  259 000000F8         __rt_div0
+  260 000000F8         fputc
+  261 000000F8         fgetc
+  262 000000F8         _sys_close
+  263 000000F8         _sys_write
+  264 000000F8         _sys_read
+  265 000000F8         _sys_istty
+  266 000000F8         _sys_seek
+  267 000000F8         _sys_ensure
+  268 000000F8         _sys_flen
+  269 000000F8         _sys_tmpnam
+  270 000000F8         _sys_command_string
+  271 000000F8 E1A00000        NOP
+  272 000000FC E3A00000        MOV              R0, #0
+  273 00000100 E12FFF1E        BX               LR
+  274 00000104         
+  275 00000104 00000000 
               400040BC 
               00000000 
               00000000 
               00000000         LTORG
-  276 00000114 00000000 
+  276 00000118 00000000 
                        StackSvc
                                DCD              SvcStackSpace  + (SVC_STACK_LEG
 TH * 4)
-  277 00000118 00000120 
+  277 0000011C 00000120 
                        StackIrq
                                DCD              IrqStackSpace  + (IRQ_STACK_LEG
 TH * 4)
-  278 0000011C 00000028 
+  278 00000120 00000028 
                        StackFiq
                                DCD              FiqStackSpace  + (FIQ_STACK_LEG
 TH * 4)
-  279 00000120 00000000 
+  279 00000124 00000000 
                        StackAbt
                                DCD              AbtStackSpace  + (ABT_STACK_LEG
 TH * 4)
-  280 00000124 00000000 
+  280 00000128 00000000 
                        StackUnd
                                DCD              UndtStackSpace + (UND_STACK_LEG
 TH * 4)
-  281 00000128         
-  282 00000128                 AREA             MyStacks, DATA, NOINIT, ALIGN =
+  281 0000012C         
+  282 0000012C                 AREA             MyStacks, DATA, NOINIT, ALIGN =
  2 
                                                             ;                  
                                                                 ;/*  ∑÷≈‰∂—’ªø’
@@ -2986,14 +2988,14 @@ TH * 4)
                                                                 
   283 00000000         
   284 00000000         SvcStackSpace
-                               SPACE            SVC_STACK_LEGTH * 4 ;/*  π‹¿Ìƒ£
-                                                             Ω∂—’ªø’º‰         
 
 
 
 ARM Macro Assembler    Page 47 
 
 
+                               SPACE            SVC_STACK_LEGTH * 4 ;/*  π‹¿Ìƒ£
+                                                             Ω∂—’ªø’º‰         
                                                               */
   285 00000000         IrqStackSpace
                                SPACE            IRQ_STACK_LEGTH * 4 ;/*  ÷–∂œƒ£
@@ -3027,8 +3029,8 @@ ARM Macro Assembler    Page 47
   300 00000000         StackUsr
   301 00000000                 END
 Command Line: --debug --xref --cpu=ARM926EJ-S --apcs=interwork --depend=..\OBJ\
-Startup.d -o..\OBJ\Startup.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\Philips --list
-=.\Startup.lst ..\SRC\SYSTEM\Startup.s
+Startup.d -o..\OBJ\Startup.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\Philips --pred
+efine="__FLASHMODE SETA 1" --list=.\Startup.lst ..\SRC\SYSTEM\Startup.s
 
 
 
@@ -3155,7 +3157,7 @@ Symbol: SoftwareInterruptAdd
       At line 73 in file ..\SRC\SYSTEM\Startup.s
       At line 94 in file ..\SRC\SYSTEM\Startup.s
 
-StackAbt 00000120
+StackAbt 00000124
 
 Symbol: StackAbt
    Definitions
@@ -3169,7 +3171,7 @@ Relocatable symbols
    Uses
       At line 145 in file ..\SRC\SYSTEM\Startup.s
 Comment: StackAbt used once
-StackFiq 0000011C
+StackFiq 00000120
 
 Symbol: StackFiq
    Definitions
@@ -3177,7 +3179,7 @@ Symbol: StackFiq
    Uses
       At line 141 in file ..\SRC\SYSTEM\Startup.s
 Comment: StackFiq used once
-StackIrq 00000118
+StackIrq 0000011C
 
 Symbol: StackIrq
    Definitions
@@ -3185,7 +3187,7 @@ Symbol: StackIrq
    Uses
       At line 137 in file ..\SRC\SYSTEM\Startup.s
 Comment: StackIrq used once
-StackSvc 00000114
+StackSvc 00000118
 
 Symbol: StackSvc
    Definitions
@@ -3193,7 +3195,7 @@ Symbol: StackSvc
    Uses
       At line 133 in file ..\SRC\SYSTEM\Startup.s
 Comment: StackSvc used once
-StackUnd 00000124
+StackUnd 00000128
 
 Symbol: StackUnd
    Definitions
@@ -3217,21 +3219,21 @@ Symbol: UndefinedAddr
    Uses
       At line 84 in file ..\SRC\SYSTEM\Startup.s
 Comment: UndefinedAddr used once
-_SDRam 000000D4
+_SDRam 000000D8
 
 Symbol: _SDRam
    Definitions
       At line 214 in file ..\SRC\SYSTEM\Startup.s
    Uses
-      None
+      At line 173 in file ..\SRC\SYSTEM\Startup.s
 
 
 
 ARM Macro Assembler    Page 4 Alphabetic symbol ordering
 Relocatable symbols
 
-Comment: _SDRam unused
-__rt_div0 000000F4
+Comment: _SDRam used once
+__rt_div0 000000F8
 
 Symbol: __rt_div0
    Definitions
@@ -3239,7 +3241,7 @@ Symbol: __rt_div0
    Uses
       At line 246 in file ..\SRC\SYSTEM\Startup.s
 Comment: __rt_div0 used once
-__user_initial_stackheap 000000E0
+__user_initial_stackheap 000000E4
 
 Symbol: __user_initial_stackheap
    Definitions
@@ -3247,7 +3249,7 @@ Symbol: __user_initial_stackheap
    Uses
       At line 74 in file ..\SRC\SYSTEM\Startup.s
 Comment: __user_initial_stackheap used once
-_sys_close 000000F4
+_sys_close 000000F8
 
 Symbol: _sys_close
    Definitions
@@ -3255,7 +3257,7 @@ Symbol: _sys_close
    Uses
       At line 249 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_close used once
-_sys_command_string 000000F4
+_sys_command_string 000000F8
 
 Symbol: _sys_command_string
    Definitions
@@ -3263,7 +3265,7 @@ Symbol: _sys_command_string
    Uses
       At line 257 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_command_string used once
-_sys_ensure 000000F4
+_sys_ensure 000000F8
 
 Symbol: _sys_ensure
    Definitions
@@ -3271,7 +3273,7 @@ Symbol: _sys_ensure
    Uses
       At line 254 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_ensure used once
-_sys_exit 000000F0
+_sys_exit 000000F4
 
 Symbol: _sys_exit
    Definitions
@@ -3279,7 +3281,7 @@ Symbol: _sys_exit
    Uses
       At line 242 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_exit used once
-_sys_flen 000000F4
+_sys_flen 000000F8
 
 Symbol: _sys_flen
    Definitions
@@ -3287,7 +3289,7 @@ Symbol: _sys_flen
    Uses
       At line 255 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_flen used once
-_sys_istty 000000F4
+_sys_istty 000000F8
 
 
 
@@ -3301,7 +3303,7 @@ Symbol: _sys_istty
    Uses
       At line 252 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_istty used once
-_sys_read 000000F4
+_sys_read 000000F8
 
 Symbol: _sys_read
    Definitions
@@ -3309,7 +3311,7 @@ Symbol: _sys_read
    Uses
       At line 251 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_read used once
-_sys_seek 000000F4
+_sys_seek 000000F8
 
 Symbol: _sys_seek
    Definitions
@@ -3317,7 +3319,7 @@ Symbol: _sys_seek
    Uses
       At line 253 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_seek used once
-_sys_tmpnam 000000F4
+_sys_tmpnam 000000F8
 
 Symbol: _sys_tmpnam
    Definitions
@@ -3325,7 +3327,7 @@ Symbol: _sys_tmpnam
    Uses
       At line 256 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_tmpnam used once
-_sys_write 000000F4
+_sys_write 000000F8
 
 Symbol: _sys_write
    Definitions
@@ -3333,7 +3335,7 @@ Symbol: _sys_write
    Uses
       At line 250 in file ..\SRC\SYSTEM\Startup.s
 Comment: _sys_write used once
-fgetc 000000F4
+fgetc 000000F8
 
 Symbol: fgetc
    Definitions
@@ -3341,7 +3343,7 @@ Symbol: fgetc
    Uses
       At line 248 in file ..\SRC\SYSTEM\Startup.s
 Comment: fgetc used once
-fputc 000000F4
+fputc 000000F8
 
 Symbol: fputc
    Definitions
@@ -11489,4 +11491,4 @@ External symbols
       At line 111 in file ..\SRC\SYSTEM\Startup.s
 Comment: vicControl used once
 8 symbols
-1201 symbols in table
+1200 symbols in table

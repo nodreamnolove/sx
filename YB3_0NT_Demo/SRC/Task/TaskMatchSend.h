@@ -16,9 +16,9 @@ typedef struct _Cycle_Que
 }_Cycle_Que_Continue;
 
 extern uint32 Get_Que_Cycle(uint8 type);
-extern uint8 Set_Que_Cycle(uint32 data,uint8 type);
+//extern uint8 Set_Que_Cycle(uint32 data,uint8 type);
 extern uint8 Get_Que_Cycle_Continue(uint32*p_add_conti,uint32 *index);
-extern uint8 Set_Que_Cycle_Continue(uint32 save_add,uint32 index);
+//extern uint8 Set_Que_Cycle_Continue(uint32 save_add,uint32 index);
 extern uint8 SD_SvDataAdd_Read(uint8 *data,uint32*p_read_add,uint32 *index);
 
 #endif

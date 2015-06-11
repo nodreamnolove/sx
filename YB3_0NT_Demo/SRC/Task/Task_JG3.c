@@ -14,11 +14,12 @@
 	
 uint32 jg3 =0 ;	  
 extern uint32   g_au32Tempa[5000][4];
+int32 last_speed3 = 0;
 /***************JG3入口系统参数************************/
 /* JG3起点        g_sspSetup.u16StartPtNum3; 
 /* JG3止点	      g_sspSetup.u16EndPtNum3
-/* JG3零点	      g_sspSetup.u16VerticalZeroPos3
-/* JG3高度		  g_sspSetup.HeightLaser3
+/* JG3零点	      g_sspSetup.u16J3ZeroPos
+/* JG3高度		  g_sspSetup.J3_Height
 /**************************************************/
 /********定义JG3数据读和处理记录变量***********/
 uint8 	g_u8JG3_RBuff_Count=0; //两激光缓存计数；
@@ -31,11 +32,19 @@ uint8   JG3_CurBuff[831]={0};
 uint16  g_u16VerticalStartAnglePt3;   //垂直激光器的起始点数 20130426
 uint16  g_u16VerticalEndAnglePt3;   //垂直激光器的终止点数
 
+/*定义缓存车辆信息的数组*/
+#define MAX_VEH	5
+uint32 g_Veh_Que3[MAX_VEH][5];
+uint8 g_rInd_3 = 0;
+uint8 g_wInd_3 = 0;
+/*定义缓存车辆信息的数组*/
+
 /**********************************************/
+uint32 g_u32count3 = 0;
 void Task_JG3(void *tdata)
 {	
 	uint8 err;
-	uint32	i;
+	int32	i;
 	uint32  j;
 	uint16  l_leftXpt, l_rightXpt;   //左右X距离对应的点数
 	uint16  l_u16index,l_u16tmp;
@@ -65,7 +74,9 @@ void Task_JG3(void *tdata)
 	int Lengthline2=ExitX3;
     int Tmp_Z = 0;                 //车辆高度
 	int	Tmp_Y = 0;
+	int32 TmpY = 0;
 	PtIncSet l_FrameInfo;
+	unsigned char U5Buff[14] = {0};
 //	uint8  Port3_Buff[831]={0};
 //	uint8 RDid[]	 		= "0012121110010001";	//设备身份识别码
 	//接收两路激光合并后数据总共1459字节；
@@ -92,6 +103,7 @@ void Task_JG3(void *tdata)
 				memcpy(g_au8JG3_3Buff[g_u8JG3_RBuff_Count],Rx_Buffer+3*Max_Size,Max_Size);
 				g_u8JG3_RBuff_Count=g_u8JG3_RBuff_Count+1;
 				g_u8JG3_RBuff_Count=g_u8JG3_RBuff_Count%3;
+				
 			}
 		}
 		if(g_u8JG3_PBuff_Count!=g_u8JG3_RBuff_Count)
@@ -108,11 +120,12 @@ void Task_JG3(void *tdata)
 					if(LMS_data_3[j] < 0)									 //每点座标
 					LMS_data_3[j] = 0;										 //每点座标
 				}	
-				LMS_data_3[361] = ((JG3_CurBuff[42]<<24)+(JG3_CurBuff[43]<<16)+(JG3_CurBuff[44]<<8)+JG3_CurBuff[45])/1000;
+				LMS_data_3[361] = ((JG3_CurBuff[42]<<24)+(JG3_CurBuff[43]<<16)+(JG3_CurBuff[44]<<8)+JG3_CurBuff[45]);
 			}
 		}
 #endif			
 		/*****************顺车道激光器求车长与车辆区域匹配***************/
+		memset(g_ZdistanceI3,0,sizeof(g_ZdistanceI3));
 		Time_Vertical = (uint32)LMS_data_3[361];
 		/*寻找激光器的起止点*/
 		g_u16VerticalStartAnglePt3 = GetStartEndPt(LMS_data_3, 30, 0, 3);
@@ -120,13 +133,13 @@ void Task_JG3(void *tdata)
 		/***************************顺车道激光器扫描数据坐标转换*******************************/
 		/***************顺车道激光器0点与起点之间坐标转换*************************************/	
 	    k=0;		
-		j=g_sspSetup.u16VerticalZeroPos3-g_u16VerticalStartAnglePt3 - 1;   
-	    for(i=g_sspSetup.u16VerticalZeroPos3-1;i >= g_u16VerticalStartAnglePt3;i--)
+		j=g_sspSetup.u16J3ZeroPos-g_u16VerticalStartAnglePt3 - 1;   
+	    for(i=g_sspSetup.u16J3ZeroPos-1;i >= g_u16VerticalStartAnglePt3;i--)
 		{
 			if(LMS_data_3[i]>ThresOrigineDataLow && LMS_data_3[i]<ThresOrigineDataHigh)//极坐标下，测得的距离在0.03m到20m间
 			{ 
-	             g_ZdistanceI3[j] = g_sspSetup.HeightLaser3 - ((LMS_data_3[i]*Tabcos[g_sspSetup.u16VerticalZeroPos3-i])>>15);
-				 g_YdistanceI3[j]= -1*((LMS_data_3[i]*Tabsin[g_sspSetup.u16VerticalZeroPos3-i])>>15);//扫描点的y坐标值	
+	             g_ZdistanceI3[j] = g_sspSetup.J3_Height - ((LMS_data_3[i]*Tabcos[g_sspSetup.u16J3ZeroPos-i])>>15);
+				 g_YdistanceI3[j]= -1*((LMS_data_3[i]*Tabsin[g_sspSetup.u16J3ZeroPos-i])>>15);//扫描点的y坐标值	
 				 Dafeiflag=0;			 
 			}
 			else															 //测得的距离不在0.03m到20m间
@@ -135,10 +148,10 @@ void Task_JG3(void *tdata)
 			     {
 					 k++;
 				     DafeiData[k][1]=j;		 //将打飞段的终止索引记录在DafeiData[k][1]中，起始索引记录在DafeiData[k][0]中，同时记录g_ZdistanceI3为零时的X坐标
-					 DafeiData[k][3]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-i]*(g_sspSetup.HeightLaser3-100)/Tabcos[g_sspSetup.u16VerticalZeroPos3-i]);
+					 DafeiData[k][3]=-(Tabsin[g_sspSetup.u16J3ZeroPos-i]*(g_sspSetup.J3_Height-100)/Tabcos[g_sspSetup.u16J3ZeroPos-i]);
 				 }
 			     DafeiData[k][0]=j;
-				 DafeiData[k][2]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-i]*(g_sspSetup.HeightLaser3-100)/Tabcos[g_sspSetup.u16VerticalZeroPos3-i]);
+				 DafeiData[k][2]=-(Tabsin[g_sspSetup.u16J3ZeroPos-i]*(g_sspSetup.J3_Height-100)/Tabcos[g_sspSetup.u16J3ZeroPos-i]);
 			     Dafeiflag=1;		 
 			}
 			j=j-1;	//点数减1
@@ -150,13 +163,13 @@ void Task_JG3(void *tdata)
 		/*JG_counter2[1]=t0_count2;
 		/*****************/
 		/********************顺车道激光器0点与结束点之间坐标转换************************/
-		 j=g_sspSetup.u16VerticalZeroPos3-g_u16VerticalStartAnglePt3;   	 
-		 for(i=g_sspSetup.u16VerticalZeroPos3;i <= g_u16VerticalEndAnglePt3;i++) 
+		 j=g_sspSetup.u16J3ZeroPos-g_u16VerticalStartAnglePt3;   	 
+		 for(i=g_sspSetup.u16J3ZeroPos;i <= g_u16VerticalEndAnglePt3;i++) 
 		 {
 		 	if(LMS_data_3[i] > ThresOrigineDataLow && LMS_data_3[i]<ThresOrigineDataHigh)//测得的距离在0.03m到20m间
 			{ 		
-				g_ZdistanceI3[j] = g_sspSetup.HeightLaser3 - ((LMS_data_3[i]*Tabcos[i-g_sspSetup.u16VerticalZeroPos3])>>15);//车高
-				g_YdistanceI3[j] = ((LMS_data_3[i]*Tabsin[i-g_sspSetup.u16VerticalZeroPos3])>>15);//扫描点的y坐标值	
+				g_ZdistanceI3[j] = g_sspSetup.J3_Height - ((LMS_data_3[i]*Tabcos[i-g_sspSetup.u16J3ZeroPos])>>15);//车高
+				g_YdistanceI3[j] = ((LMS_data_3[i]*Tabsin[i-g_sspSetup.u16J3ZeroPos])>>15);//扫描点的y坐标值	
 				Dafeiflag=0;
 			}
 			else															   //测得的距离不在0.03m到20m间
@@ -165,10 +178,10 @@ void Task_JG3(void *tdata)
 				 {
 				 k++;
 				 DafeiData[k][0]=j;
-				 DafeiData[k][2]=Tabsin[i-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-100)/Tabcos[i-g_sspSetup.u16VerticalZeroPos3];
+				 DafeiData[k][2]=Tabsin[i-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-100)/Tabcos[i-g_sspSetup.u16J3ZeroPos];
 				 }
 				 DafeiData[k][1]=j;
-				 DafeiData[k][3]=Tabsin[i-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-100)/Tabcos[i-g_sspSetup.u16VerticalZeroPos3];
+				 DafeiData[k][3]=Tabsin[i-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-100)/Tabcos[i-g_sspSetup.u16J3ZeroPos];
 			     Dafeiflag=1;		       
 			} 				 //计算打飞点时的X坐标时，对有隔离带情况，要使用g_sspSetup.HeightLaser	  zyj 20130607
 			j=j+1;	//点数加1
@@ -181,13 +194,13 @@ void Task_JG3(void *tdata)
 			if(((DafeiData[k][0]==0)||(g_ZdistanceI3[DafeiData[k][0]-1]<=ThresVehLow))&&(g_ZdistanceI3[DafeiData[k][1]+1]>ThresVehLow))
 			{
 			   m=DafeiData[k][0]+g_u16VerticalStartAnglePt3;	 //m为数组data[]的索引；车尾的索引
-			   if(g_sspSetup.u16VerticalZeroPos3>=m)
+			   if(g_sspSetup.u16J3ZeroPos>=m)
 			   {
-				 g_YdistanceI3[DafeiData[k][0]]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-m]*(g_sspSetup.HeightLaser3-g_ZdistanceI3[DafeiData[k][1]+1])/Tabcos[g_sspSetup.u16VerticalZeroPos3-m]);
+				 g_YdistanceI3[DafeiData[k][0]]=-(Tabsin[g_sspSetup.u16J3ZeroPos-m]*(g_sspSetup.J3_Height-g_ZdistanceI3[DafeiData[k][1]+1])/Tabcos[g_sspSetup.u16J3ZeroPos-m]);
 			   }
 			   else
 			   {
-				  g_YdistanceI3[DafeiData[k][0]]=Tabsin[m-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-g_ZdistanceI3[DafeiData[k][1]+1])/Tabcos[m-g_sspSetup.u16VerticalZeroPos3];
+				  g_YdistanceI3[DafeiData[k][0]]=Tabsin[m-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-g_ZdistanceI3[DafeiData[k][1]+1])/Tabcos[m-g_sspSetup.u16J3ZeroPos];
 			   }
 				g_ZdistanceI3[DafeiData[k][0]] = ThresVehLow+1;//20140915 打飞点处的修正
 				for(i=DafeiData[k][0]+1;i<=DafeiData[k][1];i++)
@@ -200,13 +213,13 @@ void Task_JG3(void *tdata)
 			else if((DafeiData[k][1]==g_u16VerticalEndAnglePt3-g_u16VerticalStartAnglePt3||g_ZdistanceI3[DafeiData[k][1]+1]<=ThresVehLow)&&(g_ZdistanceI3[DafeiData[k][0]-1]>ThresVehLow))
 			{
 				m=DafeiData[k][1]+g_u16VerticalStartAnglePt3;	 //m为数组data[]的索引；车头的索引
-				if(g_sspSetup.u16VerticalZeroPos3>=m)
+				if(g_sspSetup.u16J3ZeroPos>=m)
 				{
-					g_YdistanceI3[DafeiData[k][1]]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-m]*(g_sspSetup.HeightLaser3-ThresVehLow/2)/Tabcos[g_sspSetup.u16VerticalZeroPos3-m]);
+					g_YdistanceI3[DafeiData[k][1]]=-(Tabsin[g_sspSetup.u16J3ZeroPos-m]*(g_sspSetup.J3_Height-ThresVehLow/2)/Tabcos[g_sspSetup.u16J3ZeroPos-m]);
 				}
 				else
 				{
-					g_YdistanceI3[DafeiData[k][1]]=Tabsin[m-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-ThresVehLow/2)/Tabcos[m-g_sspSetup.u16VerticalZeroPos3];
+					g_YdistanceI3[DafeiData[k][1]]=Tabsin[m-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-ThresVehLow/2)/Tabcos[m-g_sspSetup.u16J3ZeroPos];
 				}
 				g_ZdistanceI3[DafeiData[k][1]]=ThresVehLow+1;//20140915 ThresVehLow/2->ThresVehLow+1
 				for(i=DafeiData[k][0];i<DafeiData[k][1];i++)
@@ -218,25 +231,26 @@ void Task_JG3(void *tdata)
 			///////对于车身全部打飞的情况
 			else if((g_ZdistanceI3[DafeiData[k][0]-1]<=ThresVehLow)
 					&&(g_ZdistanceI3[DafeiData[k][1]+1]<=ThresVehLow)
-					&&DafeiData[k][0]<DafeiData[k][1])	//20140121 增加打飞点位置不相等
+					&&DafeiData[k][0]<DafeiData[k][1] && abs(g_YdistanceI3[DafeiData[k][0]-1] - g_YdistanceI3[DafeiData[k][1]+1]) > 3500 
+					&& abs(DafeiData[k][0] - DafeiData[k][1]) > 15)	//20140121 增加打飞点位置不相等
 		    {
 				m=DafeiData[k][0]+g_u16VerticalStartAnglePt3;	 //m为数组data[]的索引；车尾的索引
-				if(g_sspSetup.u16VerticalZeroPos3>=m)
+				if(g_sspSetup.u16J3ZeroPos>=m)
 				{
-					g_YdistanceI3[DafeiData[k][0]]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-m]*(g_sspSetup.HeightLaser3-500)/Tabcos[g_sspSetup.u16VerticalZeroPos3-m]);
+					g_YdistanceI3[DafeiData[k][0]]=-(Tabsin[g_sspSetup.u16J3ZeroPos-m]*(g_sspSetup.J3_Height-500)/Tabcos[g_sspSetup.u16J3ZeroPos-m]);
 				}
 				else
 				{
-					g_YdistanceI3[DafeiData[k][0]]=Tabsin[m-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-500)/Tabcos[m-g_sspSetup.u16VerticalZeroPos3];
+					g_YdistanceI3[DafeiData[k][0]]=Tabsin[m-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-500)/Tabcos[m-g_sspSetup.u16J3ZeroPos];
 				}
 				m=DafeiData[k][1]+g_u16VerticalStartAnglePt3;	 //m为数组data[]的索引；车头的索引
-				if(g_sspSetup.u16VerticalZeroPos3>=m)
+				if(g_sspSetup.u16J3ZeroPos>=m)
 				{
-					g_YdistanceI3[DafeiData[k][1]]=-(Tabsin[g_sspSetup.u16VerticalZeroPos3-m]*(g_sspSetup.HeightLaser3-ThresVehLow/2)/Tabcos[g_sspSetup.u16VerticalZeroPos3-m]);
+					g_YdistanceI3[DafeiData[k][1]]=-(Tabsin[g_sspSetup.u16J3ZeroPos-m]*(g_sspSetup.J3_Height-ThresVehLow/2)/Tabcos[g_sspSetup.u16J3ZeroPos-m]);
 				}
 				else
 				{
-					g_YdistanceI3[DafeiData[k][1]]=Tabsin[m-g_sspSetup.u16VerticalZeroPos3]*(g_sspSetup.HeightLaser3-ThresVehLow/2)/Tabcos[m-g_sspSetup.u16VerticalZeroPos3];
+					g_YdistanceI3[DafeiData[k][1]]=Tabsin[m-g_sspSetup.u16J3ZeroPos]*(g_sspSetup.J3_Height-ThresVehLow/2)/Tabcos[m-g_sspSetup.u16J3ZeroPos];
 				}
 				for(i=DafeiData[k][0];i<=DafeiData[k][1];i++)
 				{
@@ -268,8 +282,8 @@ void Task_JG3(void *tdata)
 				if (!l_FrameInfo.uValid[l_u16index])
 				{
 					l_FrameInfo.uValid[l_u16index] = 1;
-					l_FrameInfo.IncPtdata[l_u16index].u16Pt1 = i;
-					l_FrameInfo.IncPtdata[l_u16index].u16Pt2 = i;
+					l_FrameInfo.IncPtdata[l_u16index].u16Pt1 = i;  //车尾
+					l_FrameInfo.IncPtdata[l_u16index].u16Pt2 = i;	//车头
 					l_FrameInfo.IncPtdata[l_u16index].n32y1 = g_YdistanceI3[i];
 					l_FrameInfo.IncPtdata[l_u16index].n32y2 = g_YdistanceI3[i];
 					l_FrameInfo.IncPtdata[l_u16index].u16yDis = 0;
@@ -319,7 +333,7 @@ void Task_JG3(void *tdata)
 				else
 				{
 					l_FrameInfo.IncPtdata[l_u16index].u16Pt2 = i;
-					l_FrameInfo.IncPtdata[l_u16index].n32y2 = g_YdistanceI[i];
+					l_FrameInfo.IncPtdata[l_u16index].n32y2 = g_YdistanceI3[i];
 					l_FrameInfo.IncPtdata[l_u16index].u16yDis = abs(l_FrameInfo.IncPtdata[l_u16index].n32y2-l_FrameInfo.IncPtdata[l_u16index].n32y1);
 					l_32tmp = l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt;	
 					if(g_ZdistanceI3[i] > l_32tmp)
@@ -405,7 +419,7 @@ void Task_JG3(void *tdata)
 				l_FrameInfo.IncPtdata[l_u16index].u16Pt2 = l_FrameInfo.IncPtdata[l_u16index+1].u16Pt2;
 				l_FrameInfo.IncPtdata[l_u16index].n32y2 = l_FrameInfo.IncPtdata[l_u16index+1].n32y2;
 				l_FrameInfo.IncPtdata[l_u16index].u16yDis = abs(l_FrameInfo.IncPtdata[l_u16index].n32y2-l_FrameInfo.IncPtdata[l_u16index].n32y1);											
-				l_32tmp = l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt;	
+				l_32tmp = l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt; 	
 				if(l_FrameInfo.IncPtdata[l_u16index+1].u16yMaxHt > l_32tmp)
 				{
 					l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt = l_FrameInfo.IncPtdata[l_u16index+1].u16yMaxHt;  //取最大值为高				
@@ -461,7 +475,7 @@ void Task_JG3(void *tdata)
 			}
 			else if (abs(l_n32EndY-l_FrameInfo.IncPtdata[l_u16index+1].n32y1)<1000
 				&& abs(l_u16EndYpt-l_FrameInfo.IncPtdata[l_u16index+1].u16Pt1)<=10
-				&& abs(g_ZdistanceI[l_u16EndYpt]-g_ZdistanceI3[l_FrameInfo.IncPtdata[l_u16index+1].u16Pt1])<1000
+				&& abs(g_ZdistanceI3[l_u16EndYpt]-g_ZdistanceI3[l_FrameInfo.IncPtdata[l_u16index+1].u16Pt1])<1000
 				&& l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt>1200 && l_FrameInfo.IncPtdata[l_u16index+1].u16yMaxHt>1200)
 			{
 				l_FrameInfo.IncPtdata[l_u16index].u16Pt2 = l_FrameInfo.IncPtdata[l_u16index+1].u16Pt2;
@@ -485,7 +499,29 @@ void Task_JG3(void *tdata)
 				l_u16index++;
 			}
 		}
-	
+		/***************
+		**由于激光器扫描数据存在散点，因此对扫描帧中的有效区域进行预处理，去掉散点
+		***************/
+		for(l_index=0;l_index<l_FrameInfo.u8Sum;l_index++)
+		{
+			if(abs(l_FrameInfo.IncPtdata[l_index].u16Pt1 - l_FrameInfo.IncPtdata[l_index].u16Pt2)>15) /*去掉散点 散点只会在车尾出现*/
+			{
+				if(abs(g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1] - g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1+1]) > 300)	/*如果两个相邻点之间的横向距离相差超过30cm 认为是散点*/	
+				{
+					l_FrameInfo.IncPtdata[l_index].u16Pt1++;
+					l_FrameInfo.IncPtdata[l_index].n32y1 = g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1];
+					
+					if(abs(g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1] - g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1+1]) > 300)
+					{
+						l_FrameInfo.IncPtdata[l_index].u16Pt1++;
+						l_FrameInfo.IncPtdata[l_index].n32y1 = g_YdistanceI3[l_FrameInfo.IncPtdata[l_index].u16Pt1];	
+					}
+					
+					l_FrameInfo.IncPtdata[l_index].u16yDis = abs(l_FrameInfo.IncPtdata[l_index].n32y2-l_FrameInfo.IncPtdata[l_index].n32y1);	
+				}
+			}
+		}
+
 		/*******标记每一辆车中车头、车尾是否打飞*********/
 		for(l_index = 0;l_index < l_FrameInfo.u8Sum;l_index++)
 		{
@@ -516,7 +552,7 @@ void Task_JG3(void *tdata)
 				|| (l_FrameInfo.IncPtdata[l_index].n32y1>=ExitX4 && l_FrameInfo.IncPtdata[l_index].n32y2>=EnterX1 && (l_u16EndYpt - l_u16StartYpt + 1)>=3 && l_FrameInfo.IncPtdata[l_index].u16yMaxHt>1000 && l_FrameInfo.IncPtdata[l_index].n32y1<=ExitX4+2000))//20140904
 			{
 				Tmp_Z=0;
-				Tmp_Z = GetVehHeight2(g_ZdistanceI, l_u16StartYpt, l_u16EndYpt);
+				Tmp_Z = GetVehHeight2(g_ZdistanceI3, l_u16StartYpt, l_u16EndYpt);
 				l_FrameInfo.IncPtdata[l_index].u16yMaxHt = Tmp_Z;	    //车高
 				
 				//*用车头最前面的点作为车头位置*/	
@@ -540,7 +576,7 @@ void Task_JG3(void *tdata)
 				Maxi=l_FrameInfo.IncPtdata[l_index].u16Pt1;
 				for(i=l_u16StartYpt;i<=l_u16EndYpt;i++)//20140916
 				{
-					if(g_YdistanceI[i]<MinX && g_ZdistanceI[i]>=ThresVehLow)
+					if(g_YdistanceI3[i]<MinX && g_ZdistanceI3[i]>=ThresVehLow)
 					{
 						MinX=g_YdistanceI3[i];
 						Maxi=i;
@@ -587,8 +623,8 @@ void Task_JG3(void *tdata)
 					{
 						l_32tmp2 = g_VehIncSet3[i].Idata.u16FrameCnt &  FRAME_MASK;
 						if (IsInIncSide(l_n32StartY, l_n32EndY, g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1],g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0])
-							|| (l_n32EndY<0 && abs(l_n32EndY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0])<1500 && abs(l_u16StartYpt-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][3])<=10 && g_ZdistanceI[l_u16StartYpt]+1000<l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt)
-							|| (l_n32EndY>0 && abs(l_n32StartY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1])<1500 && g_ZdistanceI[l_u16EndYpt]+1000<l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt))
+							|| (l_n32EndY<0 && abs(l_n32EndY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0])<1500 && abs(l_u16StartYpt-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][3])<=10 && g_ZdistanceI3[l_u16StartYpt]+1000<l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt)
+							|| (l_n32EndY>0 && abs(l_n32StartY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1])<1500 && g_ZdistanceI3[l_u16EndYpt]+1000<l_FrameInfo.IncPtdata[l_u16index].u16yMaxHt))
 						{
 							 l_32tmp = 1;  //区域匹配成功
 							 if ((l_n32StartY>=0 && abs(l_n32StartY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1])>50)//车尾
@@ -630,6 +666,7 @@ void Task_JG3(void *tdata)
 								g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2][0] = g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2][1] + (g_VehIncSet3[i].Idata.yMax[l_32tmp2-1]+g_VehIncSet3[i].Idata.yMax[l_32tmp2-2])/2;
 								g_VehIncSet3[i].Idata.yMax[l_32tmp2] = abs(g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2][0]-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2][1]);
 							}
+							break;
 						}
 						else if (l_32tmp2>2 && IsInIncSide(l_n32StartY, l_n32EndY, g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-2][1],g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-2][0]))
 						{
@@ -668,12 +705,17 @@ void Task_JG3(void *tdata)
 								g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1] = (g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-2][1]+l_n32StartY)/2;
 								g_VehIncSet3[i].Idata.yMax[l_32tmp2-1] = abs(g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-2][0] - g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-2][1]);
 							}
+							break;
 						}
-						break;
+					//	break;
 					}										
 				}
-				if (0 == l_32tmp && l_FrameInfo.IncPtdata[l_u16index].n32y1<0)	 //新车进入
+				if (0 == l_32tmp && l_FrameInfo.IncPtdata[l_u16index].n32y1<-2000 && 
+					l_FrameInfo.IncPtdata[l_u16index].n32y2<-2000)	 //新车进入
 				{
+
+					if(g_VehIncTotal3 >= VEHICLE_MAX)
+						break;
 					memcpy(&l_u16IncPosVect[0],&l_FrameInfo.IncPtdata[l_u16index],sizeof(IncPtSt)); 				
 					l_32tmp = 1;				
 					for(l_u16tmp = 0;l_u16tmp<l_32tmp;l_u16tmp++)
@@ -735,13 +777,21 @@ void Task_JG3(void *tdata)
 				{ 		
 				   g_VehIncSet3[i].u8Istate = PASSED_USED;  //已结束，可收尾的车
 				}
-				else if (l_32tmp2 >0 && (0 == g_VehIncSet3[i].u8ThrowFlag) 
+				else if (l_32tmp2 >1 && (0 == g_VehIncSet3[i].u8ThrowFlag) 
 					&& g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0]>ExitX3)   //车头过线
 				{
 				   g_VehIncSet3[i].speed = GetVehSpeed(&g_VehIncSet3[i], EnterX2, EnterX1);	//车头速度
+				   /***********
+				   **添加通过扫描曲线计算车辆长度
+				   **如果当前速度不为零，将当前速度保存为last_speed3
+				   ***********/
+				   g_VehIncSet3[i].yLen = GetMaxData(g_VehIncSet3[i].Idata.yMax,l_32tmp2*2/3,l_32tmp2);
+				   if(0 != g_VehIncSet3[i].speed)
+				   		last_speed3 = g_VehIncSet3[i].speed;
 				   g_VehIncSet3[i].u8ThrowFlag = 1;
 				}
-				else if (l_32tmp2 >0 && g_VehIncSet3[i].IemptFrame > ERR_MAX_EMPTYFRAME)
+				//else if (l_32tmp2 >0 && g_VehIncSet3[i].IemptFrame > ERR_MAX_EMPTYFRAME)
+				/*临时修改*/if (l_32tmp2 >0 && g_VehIncSet3[i].IemptFrame > ERR_MAX_EMPTYFRAME)
 				{
 					memset(&g_VehIncSet3[i], 0,sizeof(VehIncSt)); //清除顺道激光器该记录
 					g_VehIncSet3[i].u8Istate = NO_USED; 
@@ -755,6 +805,8 @@ void Task_JG3(void *tdata)
 					else
 					{
 						g_VehIncTotal3 = 0;
+						memset((unsigned char*)&g_VehIncSet3,0,sizeof(g_VehIncSet3));
+						memset((unsigned char*)&g_VehIncSetIndex3,0,sizeof(g_VehIncSetIndex3));
 					}
 					continue;
 				}
@@ -772,6 +824,8 @@ void Task_JG3(void *tdata)
 					else
 					{
 						g_VehIncTotal3 = 0;
+						memset((unsigned char*)&g_VehIncSet3,0,sizeof(g_VehIncSet3));
+						memset((unsigned char*)&g_VehIncSetIndex3,0,sizeof(g_VehIncSetIndex3));
 					}
 					continue;
 				}		
@@ -786,9 +840,9 @@ void Task_JG3(void *tdata)
 			if (g_VehIncSet3[i].u8Istate != NO_USED)
 			{
 			   l_32tmp2 = g_VehIncSet3[i].Idata.u16FrameCnt &  FRAME_MASK;
-			   if((0 == g_VehIncSet3[i].u8LineFlag1)  
+			   if((0 == g_VehIncSet3[i].u8LineFlag1) /*车头过了L1线，没过L2线，车尾没过L1线*/ 
 					&& g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0]>Lengthline1 
-					&& (g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]<Lengthline1)
+					/*&& (g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]<Lengthline1)*/
 					&& g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0]<Lengthline2)
 			    {
 					g_VehIncSet3[i].nStartTime =	g_VehIncSet3[i].Idata.tdata[l_32tmp2-1];      //开始时间为车头时间，已经修正过的时间
@@ -802,25 +856,112 @@ void Task_JG3(void *tdata)
 					{
 						if(g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][0]>=Lengthline2 
 							&& g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]>=Lengthline2)
-						{
+						{	/*车头和车尾都过了L2线*/	/*其中L1= -7500 L2=E3*/
 							g_VehIncSet3[i].u8LineFlag2 = 1;
 						}				
 					}
 					else if (1 == g_VehIncSet3[i].u8LineFlag2)
-					{						
+					{
+						g_VehIncSet3[i].zLen = GetVehicleHeight(g_VehIncSet3[i].Idata.zMax,g_VehIncSet3[i].Idata.u16FrameCnt);/*车辆高度*/						
 						g_VehIncSet3[i].nEndTime = g_VehIncSet3[i].Idata.tdata[l_32tmp2-1] 
 							- (g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][2]-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][3])*10000/360; //结束时间
-						g_VehIncSet3[i].yLen= g_VehIncSet3[i].speed*(g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime)/36000 
-							- abs(g_VehIncSet3[i].ndeltaY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]);  //车辆长度
+						TmpY = g_VehIncSet3[i].speed*(g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime)/36000 
+									- abs(g_VehIncSet3[i].ndeltaY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]);  //车辆长度
+
+						/********************
+						**如果TmpY值为零或负值，重新计算TmpY
+						********************/
+						if(TmpY <= 0)
+							TmpY = last_speed3*(g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime)/36000 
+										- abs(g_VehIncSet3[i].ndeltaY-g_VehIncSet3[i].Idata.ydataInfo[l_32tmp2-1][1]);
+						if(g_VehIncSet3[i].yLen == 0)	
+						{
+							g_VehIncSet3[i].yLen = TmpY;		
+						}
+						else
+						{
+						/***************
+						**比较测量车辆长度值与计算车辆长度值
+						***************/
+						if (abs(TmpY-g_VehIncSet3[i].yLen)>1000 && TmpY > 6000)	//以测量为准
+						{
+							g_VehIncSet3[i].yLen = TmpY;
+
+						}
+						else if(abs(TmpY-g_VehIncSet3[i].yLen)>500 && TmpY < 6000 && g_VehIncSet3[i].zLen>1700)
+						{
+							g_VehIncSet3[i].yLen = TmpY;
+						}
+						else if (TmpY>0 && g_VehIncSet3[i].yLen>0 
+							&& TmpY<6000 && TmpY>g_VehIncSet3[i].yLen)//以计算为准
+						{
+							g_VehIncSet3[i].yLen = TmpY;
+						}
+//							if(abs(g_VehIncSet3[i].yLen - TmpY)>800)
+//							{
+//								//	
+//							}
+//							else
+//							{
+//								g_VehIncSet3[i].yLen = 	(g_VehIncSet3[i].yLen + TmpY)/2;	
+//							}
+						}
+
+						U5Buff[5] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 24); 
+						U5Buff[6] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 16); 
+						U5Buff[7] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 8); 
+						U5Buff[8] = (g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime); 
+
 						g_VehIncSet3[i].ndeltaY = 0;
 						g_VehIncSet3[i].nStartTime = 0;
 						g_VehIncSet3[i].nEndTime = 0;
 						g_VehIncSet3[i].u8LineFlag1 = 2;
-						g_VehIncSet3[i].u8LineFlag2 = 2;									
+						g_VehIncSet3[i].u8LineFlag2 = 2;
+						
+						/*添加通过串口将车长和车速输出，同时将记录集中的u8Istate标志清零*/
+					//	U5SendBytes((unsigned char*)&g_VehIncSet3[i].yLen,4);
+					//	U5SendBytes((unsigned char*)&g_VehIncSet3[i].zLen,4);
+					//	U5SendBytes((unsigned char*)&g_VehIncSet3[i].speed,4);
+						U5Buff[0] = 0xA2; //车道
+						U5Buff[1] = 0;		
+						U5Buff[2] = 0;
+						U5Buff[3] = (g_VehIncSet3[i].yLen >> 8);		
+						U5Buff[4] = g_VehIncSet3[i].yLen;
+//						U5Buff[5] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 24); 
+//						U5Buff[6] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 16); 
+//						U5Buff[7] = ((g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime) >> 8); 
+//						U5Buff[8] = (g_VehIncSet3[i].nEndTime-g_VehIncSet3[i].nStartTime); 
+						U5Buff[5] = 0; 
+						U5Buff[6] = 0; 
+						U5Buff[7] = 0; 
+						U5Buff[8] = 0; 
+						U5Buff[9] = 0;
+						U5Buff[10] = 0;
+						U5Buff[11] = 0; //
+						U5Buff[12] = 0; //
+					   	U5Buff[13] = 0;
+					//	U5SendBytes(U5Buff,14);
+						/*将车辆信息转储到车辆信息缓存队列中*/
+					
+						g_Veh_Que3[g_wInd_3][0] = t0_count2;   /*时间戳*/
+						g_Veh_Que3[g_wInd_3][1] = 2;/* 车道 Task_JG3 对应2车道*/	
+						g_Veh_Que3[g_wInd_3][2] = g_VehIncSet3[i].yLen;/*长*/
+						g_Veh_Que3[g_wInd_3][3] = g_VehIncSet3[i].zLen;/*高*/
+						g_Veh_Que3[g_wInd_3][4] = g_VehIncSet3[i].speed;/*速度*/
+						g_wInd_3 = (g_wInd_3+1) % MAX_VEH; 	
+						/*将车辆信息转储到车辆信息缓存队列中*/
+						
+						memset(&g_VehIncSet3[i], 0,sizeof(VehIncSt)); //清除顺道激光器该记录
+						for(l_u16tmp = j;l_u16tmp < g_VehIncTotal3 - 1;l_u16tmp++)
+							g_VehIncSetIndex3[l_u16tmp] = g_VehIncSetIndex3[l_u16tmp+1];
+					
+						g_VehIncSetIndex3[g_VehIncTotal3 - 1] = 0;
+						g_VehIncTotal3--;									
 					}			
 				}		
 			}		
 		}
-        /****************垂直激光器与顺车道激光器匹配不放在此处进行*********************************/		
+        /****************垂直激光器与顺车道激光器匹配不放在此处进行*********************************/
+		g_u32count3++;		
 	}
 }
